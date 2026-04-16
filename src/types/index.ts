@@ -215,7 +215,7 @@ export interface RouteProductQuote {
 }
 
 // 航线区域
-export type RouteRegion = 'southeast_asia' | 'europe' | 'america' | 'middle_east' | 'mediterranean' | 'south_america' | 'origin';
+export type RouteRegion = 'southeast_asia' | 'europe' | 'america' | 'middle_east' | 'mediterranean' | 'south_america' | 'africa' | 'origin';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 附加费明细

@@ -150,15 +150,14 @@ async function main() {
       overallTrend: 'bullish'
     },
     mainRoutes: [
-      { route: 'Shanghai-Rotterdam', routeName: '上海-鹿特丹', currentPrice: 2850, previousPrice: 2780, change: 70, changePercent: 2.52, unit: 'USD/TEU' },
-      { route: 'Shanghai-Los Angeles', routeName: '上海-洛杉矶', currentPrice: 3200, previousPrice: 3350, change: -150, changePercent: -4.48, unit: 'USD/TEU' },
-      { route: 'Shanghai-New York', routeName: '上海-纽约', currentPrice: 4200, previousPrice: 4050, change: 150, changePercent: 3.70, unit: 'USD/TEU' },
-      { route: 'Shanghai-Dubai', routeName: '上海-迪拜', currentPrice: 1450, previousPrice: 1420, change: 30, changePercent: 2.11, unit: 'USD/TEU' },
-      { route: 'Shanghai-Singapore', routeName: '上海-新加坡', currentPrice: 580, previousPrice: 560, change: 20, changePercent: 3.57, unit: 'USD/TEU' },
-      { route: 'Ningbo-Hamburg', routeName: '宁波-汉堡', currentPrice: 2750, previousPrice: 2680, change: 70, changePercent: 2.61, unit: 'USD/TEU' },
-      { route: 'Shenzhen-Antwerp', routeName: '深圳-安特卫普', currentPrice: 2900, previousPrice: 2820, change: 80, changePercent: 2.84, unit: 'USD/TEU' },
-      { route: 'Hong Kong-Santos', routeName: '香港-桑托斯', currentPrice: 1850, previousPrice: 1920, change: -70, changePercent: -3.65, unit: 'USD/TEU' },
-      { route: 'Shenzhen-Djibouti', routeName: '深圳-吉布提', currentPrice: 1650, previousPrice: 1580, change: 70, changePercent: 4.43, unit: 'USD/TEU' }
+      { route: 'EU', routeName: '欧洲航线', currentPrice: 2850, previousPrice: 2780, change: 70, changePercent: 2.52, unit: 'USD/TEU' },
+      { route: 'USWC', routeName: '美西航线', currentPrice: 3200, previousPrice: 3350, change: -150, changePercent: -4.48, unit: 'USD/TEU' },
+      { route: 'USEC', routeName: '美东航线', currentPrice: 4200, previousPrice: 4050, change: 150, changePercent: 3.70, unit: 'USD/TEU' },
+      { route: 'SEA', routeName: '东南亚航线', currentPrice: 580, previousPrice: 560, change: 20, changePercent: 3.57, unit: 'USD/TEU' },
+      { route: 'MED', routeName: '地中海航线', currentPrice: 2650, previousPrice: 2600, change: 50, changePercent: 1.92, unit: 'USD/TEU' },
+      { route: 'MDE', routeName: '中东航线', currentPrice: 1450, previousPrice: 1420, change: 30, changePercent: 2.11, unit: 'USD/TEU' },
+      { route: 'SA', routeName: '南美航线', currentPrice: 1850, previousPrice: 1920, change: -70, changePercent: -3.65, unit: 'USD/TEU' },
+      { route: 'DJI', routeName: '深圳-吉布提', currentPrice: 1650, previousPrice: 1580, change: 70, changePercent: 4.43, unit: 'USD/TEU' }
     ]
   };
 

@@ -123,100 +123,90 @@ export const freightIndices: FreightIndex[] = [
     changePercent: 1.92,
     trend: 'up',
     history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 1.2 }))
+  },
+  {
+    name: '东南亚航线运价',
+    code: 'SEA',
+    currentValue: 580,
+    previousValue: 560,
+    change: 20,
+    changePercent: 3.57,
+    trend: 'up',
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.27 }))
+  },
+  {
+    name: '中东航线运价',
+    code: 'MDE',
+    currentValue: 1450,
+    previousValue: 1420,
+    change: 30,
+    changePercent: 2.11,
+    trend: 'up',
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.67 }))
+  },
+  {
+    name: '南美航线运价',
+    code: 'SA',
+    currentValue: 1850,
+    previousValue: 1920,
+    change: -70,
+    changePercent: -3.65,
+    trend: 'down',
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.85 }))
+  },
+  {
+    name: '深圳-吉布提航线运价',
+    code: 'DJI',
+    currentValue: 1650,
+    previousValue: 1580,
+    change: 70,
+    changePercent: 4.43,
+    trend: 'up',
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.76 }))
   }
 ];
 
-// 主要航线运价
+// 主要航线运价（统一 8 条标准航线，所有模块共用此格式）
 export const mainRoutes: FreightRate[] = [
   {
-    route: 'Shanghai-Rotterdam',
-    routeName: '上海-鹿特丹',
-    currentPrice: 2850,
-    previousPrice: 2780,
-    change: 70,
-    changePercent: 2.52,
-    unit: 'USD/TEU',
-    lastUpdate: '2026-04-15'
+    route: 'EU', routeName: '欧洲航线',
+    currentPrice: 2850, previousPrice: 2780, change: 70, changePercent: 2.52,
+    unit: 'USD/TEU', lastUpdate: '2026-04-15'
   },
   {
-    route: 'Shanghai-Los Angeles',
-    routeName: '上海-洛杉矶',
-    currentPrice: 3200,
-    previousPrice: 3350,
-    change: -150,
-    changePercent: -4.48,
-    unit: 'USD/TEU',
-    lastUpdate: '2026-04-15'
+    route: 'USWC', routeName: '美西航线',
+    currentPrice: 3200, previousPrice: 3350, change: -150, changePercent: -4.48,
+    unit: 'USD/TEU', lastUpdate: '2026-04-15'
   },
   {
-    route: 'Shanghai-New York',
-    routeName: '上海-纽约',
-    currentPrice: 4200,
-    previousPrice: 4050,
-    change: 150,
-    changePercent: 3.70,
-    unit: 'USD/TEU',
-    lastUpdate: '2026-04-15'
+    route: 'USEC', routeName: '美东航线',
+    currentPrice: 4200, previousPrice: 4050, change: 150, changePercent: 3.70,
+    unit: 'USD/TEU', lastUpdate: '2026-04-15'
   },
   {
-    route: 'Shanghai-Dubai',
-    routeName: '上海-迪拜',
-    currentPrice: 1450,
-    previousPrice: 1420,
-    change: 30,
-    changePercent: 2.11,
-    unit: 'USD/TEU',
-    lastUpdate: '2026-04-15'
+    route: 'SEA', routeName: '东南亚航线',
+    currentPrice: 580, previousPrice: 560, change: 20, changePercent: 3.57,
+    unit: 'USD/TEU', lastUpdate: '2026-04-15'
   },
   {
-    route: 'Shanghai-Singapore',
-    routeName: '上海-新加坡',
-    currentPrice: 580,
-    previousPrice: 560,
-    change: 20,
-    changePercent: 3.57,
-    unit: 'USD/TEU',
-    lastUpdate: '2026-04-15'
+    route: 'MED', routeName: '地中海航线',
+    currentPrice: 2650, previousPrice: 2600, change: 50, changePercent: 1.92,
+    unit: 'USD/TEU', lastUpdate: '2026-04-15'
   },
   {
-    route: 'Ningbo-Hamburg',
-    routeName: '宁波-汉堡',
-    currentPrice: 2750,
-    previousPrice: 2680,
-    change: 70,
-    changePercent: 2.61,
-    unit: 'USD/TEU',
-    lastUpdate: '2026-04-15'
+    route: 'MDE', routeName: '中东航线',
+    currentPrice: 1450, previousPrice: 1420, change: 30, changePercent: 2.11,
+    unit: 'USD/TEU', lastUpdate: '2026-04-15'
   },
   {
-    route: 'Shenzhen-Antwerp',
-    routeName: '深圳-安特卫普',
-    currentPrice: 2900,
-    previousPrice: 2820,
-    change: 80,
-    changePercent: 2.84,
-    unit: 'USD/TEU',
-    lastUpdate: '2026-04-15'
+    route: 'SA', routeName: '南美航线',
+    currentPrice: 1850, previousPrice: 1920, change: -70, changePercent: -3.65,
+    unit: 'USD/TEU', lastUpdate: '2026-04-15'
   },
   {
-    route: 'Hong Kong-Santos',
-    routeName: '香港-桑托斯',
-    currentPrice: 1850,
-    previousPrice: 1920,
-    change: -70,
-    changePercent: -3.65,
-    unit: 'USD/TEU',
-    lastUpdate: '2026-04-15'
-  },
-  {
-    route: 'Shenzhen-Djibouti',
-    routeName: '深圳-吉布提',
-    currentPrice: 1650,
-    previousPrice: 1580,
-    change: 70,
-    changePercent: 4.43,
-    unit: 'USD/TEU',
-    lastUpdate: '2026-04-15'
+    route: 'DJI', routeName: '深圳-吉布提',
+    currentPrice: 1650, previousPrice: 1580, change: 70, changePercent: 4.43,
+    unit: 'USD/TEU', lastUpdate: '2026-04-15'
   }
 ];
 
@@ -239,7 +229,7 @@ export const geopoliticalFactors: GeopoliticalFactor[] = [
     impact: 'negative',
     severity: 'high',
     description: '胡塞武装持续袭击商船，迫使船公司绕行好望角，大幅增加运输时间和成本',
-    affectedRoutes: ['Shanghai-Rotterdam', 'Ningbo-Hamburg', 'Shenzhen-Antwerp', 'Shanghai-Dubai'],
+    affectedRoutes: ['EU', 'MDE'],
     startDate: '2023-12-01',
     currentStatus: 'active'
   },
@@ -249,7 +239,7 @@ export const geopoliticalFactors: GeopoliticalFactor[] = [
     impact: 'negative',
     severity: 'medium',
     description: '德国港口工人罢工导致作业效率下降，预计影响汉堡、不来梅等港口',
-    affectedRoutes: ['Ningbo-Hamburg', 'Shenzhen-Antwerp'],
+    affectedRoutes: ['EU'],
     startDate: '2026-04-10',
     endDate: '2026-04-20',
     currentStatus: 'active'
@@ -260,7 +250,7 @@ export const geopoliticalFactors: GeopoliticalFactor[] = [
     impact: 'neutral',
     severity: 'medium',
     description: 'ILWU与 PMA 谈判进展缓慢，市场观望情绪浓厚',
-    affectedRoutes: ['Shanghai-Los Angeles'],
+    affectedRoutes: ['USWC'],
     startDate: '2026-03-15',
     currentStatus: 'active'
   },
@@ -270,7 +260,7 @@ export const geopoliticalFactors: GeopoliticalFactor[] = [
     impact: 'negative',
     severity: 'low',
     description: '菲律宾以东热带低压可能影响东亚航线船期',
-    affectedRoutes: ['Shanghai-Singapore', 'Shanghai-Dubai'],
+    affectedRoutes: ['SEA', 'MDE'],
     startDate: '2026-04-14',
     endDate: '2026-04-17',
     currentStatus: 'active'
@@ -281,7 +271,7 @@ export const geopoliticalFactors: GeopoliticalFactor[] = [
     impact: 'positive',
     severity: 'high',
     description: '苏伊士运河管理局加快通航效率，部分缓解红海绕行压力',
-    affectedRoutes: ['Shanghai-Rotterdam', 'Ningbo-Hamburg', 'Shenzhen-Antwerp'],
+    affectedRoutes: ['EU'],
     startDate: '2026-01-01',
     currentStatus: 'active'
   },
@@ -291,61 +281,59 @@ export const geopoliticalFactors: GeopoliticalFactor[] = [
     impact: 'positive',
     severity: 'medium',
     description: '埃塞俄比亚经吉布提港的进出口货物量持续增长，支撑航线运价稳定',
-    affectedRoutes: ['Shenzhen-Djibouti'],
+    affectedRoutes: ['DJI'],
     startDate: '2026-01-01',
     currentStatus: 'active'
   }
 ];
 
-// 航线预测数据
+// 航线预测数据（统一 8 条标准航线）
 export const routeForecastData: RouteData[] = [
   {
-    id: 'eu-route',
-    name: '欧洲航线',
-    code: 'EU',
-    region: 'Europe',
-    currentRate: 2850,
-    forecast: generateForecast(2850, 'up', 4),
+    id: 'eu-route', name: '欧洲航线', code: 'EU', region: 'Europe',
+    currentRate: 2850, forecast: generateForecast(2850, 'up', 4),
     fakRate: { price20gp: 2400, price40gp: 4200, price40hq: 4300, lastUpdate: '2026-04-15' },
     contractRate: { quarterly: 2600, annual: 2400, premium: 8.3 }
   },
   {
-    id: 'uswc-route',
-    name: '美西航线',
-    code: 'USWC',
-    region: 'North America',
-    currentRate: 3200,
-    forecast: generateForecast(3200, 'down', 4),
+    id: 'uswc-route', name: '美西航线', code: 'USWC', region: 'North America',
+    currentRate: 3200, forecast: generateForecast(3200, 'down', 4),
     fakRate: { price20gp: 2800, price40gp: 4800, price40hq: 4900, lastUpdate: '2026-04-15' },
     contractRate: { quarterly: 3000, annual: 2800, premium: 12.5 }
   },
   {
-    id: 'usec-route',
-    name: '美东航线',
-    code: 'USEC',
-    region: 'North America',
-    currentRate: 4200,
-    forecast: generateForecast(4200, 'up', 4),
+    id: 'usec-route', name: '美东航线', code: 'USEC', region: 'North America',
+    currentRate: 4200, forecast: generateForecast(4200, 'up', 4),
     fakRate: { price20gp: 3600, price40gp: 6400, price40hq: 6600, lastUpdate: '2026-04-15' },
     contractRate: { quarterly: 3900, annual: 3600, premium: 14.3 }
   },
   {
-    id: 'med-route',
-    name: '地中海航线',
-    code: 'MED',
-    region: 'Mediterranean',
-    currentRate: 2650,
-    forecast: generateForecast(2650, 'stable', 4),
+    id: 'sea-route', name: '东南亚航线', code: 'SEA', region: 'Southeast Asia',
+    currentRate: 580, forecast: generateForecast(580, 'up', 4),
+    fakRate: { price20gp: 480, price40gp: 850, price40hq: 880, lastUpdate: '2026-04-15' },
+    contractRate: { quarterly: 520, annual: 490, premium: 11.7 }
+  },
+  {
+    id: 'med-route', name: '地中海航线', code: 'MED', region: 'Mediterranean',
+    currentRate: 2650, forecast: generateForecast(2650, 'stable', 4),
     fakRate: { price20gp: 2200, price40gp: 3800, price40hq: 3900, lastUpdate: '2026-04-15' },
     contractRate: { quarterly: 2500, annual: 2300, premium: 13.2 }
   },
   {
-    id: 'djibouti-route',
-    name: '深圳-吉布提',
-    code: 'DJI',
-    region: 'Red Sea / Africa',
-    currentRate: 1650,
-    forecast: generateForecast(1650, 'up', 4),
+    id: 'mde-route', name: '中东航线', code: 'MDE', region: 'Middle East',
+    currentRate: 1450, forecast: generateForecast(1450, 'stable', 4),
+    fakRate: { price20gp: 1200, price40gp: 2100, price40hq: 2180, lastUpdate: '2026-04-15' },
+    contractRate: { quarterly: 1350, annual: 1280, premium: 13.2 }
+  },
+  {
+    id: 'sa-route', name: '南美航线', code: 'SA', region: 'South America',
+    currentRate: 1850, forecast: generateForecast(1850, 'down', 4),
+    fakRate: { price20gp: 1600, price40gp: 2750, price40hq: 2850, lastUpdate: '2026-04-15' },
+    contractRate: { quarterly: 1750, annual: 1680, premium: 10.1 }
+  },
+  {
+    id: 'djibouti-route', name: '深圳-吉布提', code: 'DJI', region: 'Africa',
+    currentRate: 1650, forecast: generateForecast(1650, 'up', 4),
     fakRate: { price20gp: 1400, price40gp: 2400, price40hq: 2500, lastUpdate: '2026-04-15' },
     contractRate: { quarterly: 1550, annual: 1450, premium: 12.1 }
   }
@@ -395,52 +383,55 @@ function getForecastFactors(trend: 'up' | 'down' | 'stable'): string[] {
   return factors[trend].slice(0, 3);
 }
 
-// 订舱建议
+// 订舱建议（统一 8 条标准航线）
 export const bookingRecommendations: BookingRecommendation[] = [
   {
-    route: '上海-鹿特丹',
-    action: 'book_now',
-    confidence: 82,
+    route: 'EU',
+    action: 'book_now', confidence: 82,
     reason: '红海危机持续推高运价，预计2周内仍有5-8%上涨空间，建议尽快锁定舱位',
-    optimalTiming: '本周内',
-    priceRange: { min: 2850, max: 3100, expected: 2950 },
-    riskLevel: 'medium'
+    optimalTiming: '本周内', priceRange: { min: 2850, max: 3100, expected: 2950 }, riskLevel: 'medium'
   },
   {
-    route: '上海-洛杉矶',
-    action: 'wait',
-    confidence: 75,
+    route: 'USWC',
+    action: 'wait', confidence: 75,
     reason: '美西航线运价回调，短期趋势向下，建议观望2周等待更好的订舱窗口',
-    optimalTiming: '4月底',
-    priceRange: { min: 2900, max: 3200, expected: 3050 },
-    riskLevel: 'low'
+    optimalTiming: '4月底', priceRange: { min: 2900, max: 3200, expected: 3050 }, riskLevel: 'low'
   },
   {
-    route: '上海-纽约',
-    action: 'book_now',
-    confidence: 78,
+    route: 'USEC',
+    action: 'book_now', confidence: 78,
     reason: '美东需求旺盛，舱位紧张，预计运价将继续上涨10%左右',
-    optimalTiming: '本周内',
-    priceRange: { min: 4200, max: 4600, expected: 4350 },
-    riskLevel: 'medium'
+    optimalTiming: '本周内', priceRange: { min: 4200, max: 4600, expected: 4350 }, riskLevel: 'medium'
   },
   {
-    route: '地中海航线',
-    action: 'hedge',
-    confidence: 70,
+    route: 'SEA',
+    action: 'wait', confidence: 70,
+    reason: '东南亚航线运价稳定，短期波动小，可按需订舱',
+    optimalTiming: '按需', priceRange: { min: 550, max: 620, expected: 590 }, riskLevel: 'low'
+  },
+  {
+    route: 'MED',
+    action: 'hedge', confidence: 70,
     reason: '欧洲港口罢工影响不确定性较大，建议分批订舱对冲风险',
-    optimalTiming: '分批执行',
-    priceRange: { min: 2600, max: 2800, expected: 2700 },
-    riskLevel: 'high'
+    optimalTiming: '分批执行', priceRange: { min: 2600, max: 2800, expected: 2700 }, riskLevel: 'high'
   },
   {
-    route: '深圳-吉布提',
-    action: 'book_now',
-    confidence: 80,
+    route: 'MDE',
+    action: 'wait', confidence: 68,
+    reason: '中东航线运价平稳，斋月后可能有小幅回调',
+    optimalTiming: '5月初', priceRange: { min: 1380, max: 1500, expected: 1430 }, riskLevel: 'low'
+  },
+  {
+    route: 'SA',
+    action: 'hedge', confidence: 65,
+    reason: '南美航线汇率波动风险大，建议分批锁定',
+    optimalTiming: '分批执行', priceRange: { min: 1750, max: 1900, expected: 1820 }, riskLevel: 'high'
+  },
+  {
+    route: 'DJI',
+    action: 'book_now', confidence: 80,
     reason: '埃塞俄比亚进口需求旺盛，吉布提港中转货物量增长，预计运价将继续上涨5-7%',
-    optimalTiming: '本周内',
-    priceRange: { min: 1650, max: 1780, expected: 1720 },
-    riskLevel: 'low'
+    optimalTiming: '本周内', priceRange: { min: 1650, max: 1780, expected: 1720 }, riskLevel: 'low'
   }
 ];
 
@@ -502,167 +493,63 @@ export const shippingLines: ShippingLine[] = [
   }
 ];
 
-// 船期数据（增强版：含截关时间）
+// 船期数据（统一航线代码，8 条标准航线各一条）
 export const vesselSchedules: VesselSchedule[] = [
   {
-    id: 'vs001',
-    vesselName: 'MSC GÜLSÜN',
-    voyageNumber: 'WU261R',
-    shippingLine: 'MSC',
-    route: 'Shanghai-Rotterdam',
-    routeName: '上海-鹿特丹',
-    pol: 'CNSHA',
-    polName: '上海港',
-    pod: 'NLRTM',
-    podName: '鹿特丹港',
-    etd: '2026-04-18',
-    eta: '2026-05-15',
-    transitDays: 27,
-    capacity: 23756,
-    availableTeu: 850,
-    price: 2850,
-    status: 'open',
-    cutoffTime: '04-15 18:00'
+    id: 'vs001', vesselName: 'MSC GÜLSÜN', voyageNumber: 'WU261R', shippingLine: 'MSC',
+    route: 'EU', routeName: '欧洲航线',
+    pol: 'CNSHA', polName: '上海港', pod: 'NLRTM', podName: '鹿特丹港',
+    etd: '2026-04-18', eta: '2026-05-15', transitDays: 27,
+    capacity: 23756, availableTeu: 850, price: 2850, status: 'open', cutoffTime: '04-15 18:00'
   },
   {
-    id: 'vs002',
-    vesselName: 'Maersk Mc-Kinney',
-    voyageNumber: 'ME261A',
-    shippingLine: 'Maersk',
-    route: 'Shanghai-Los Angeles',
-    routeName: '上海-洛杉矶',
-    pol: 'CNSHA',
-    polName: '上海港',
-    pod: 'USLAX',
-    podName: '洛杉矶港',
-    etd: '2026-04-20',
-    eta: '2026-05-08',
-    transitDays: 18,
-    capacity: 18270,
-    availableTeu: 1200,
-    price: 3200,
-    status: 'open',
-    cutoffTime: '04-17 18:00'
+    id: 'vs002', vesselName: 'Maersk Mc-Kinney', voyageNumber: 'ME261A', shippingLine: 'Maersk',
+    route: 'USWC', routeName: '美西航线',
+    pol: 'CNSHA', polName: '上海港', pod: 'USLAX', podName: '洛杉矶港',
+    etd: '2026-04-20', eta: '2026-05-08', transitDays: 18,
+    capacity: 18270, availableTeu: 1200, price: 3200, status: 'open', cutoffTime: '04-17 18:00'
   },
   {
-    id: 'vs003',
-    vesselName: 'CMA CGM Antoine',
-    voyageNumber: 'AX261B',
-    shippingLine: 'CMA CGM',
-    route: 'Shanghai-New York',
-    routeName: '上海-纽约',
-    pol: 'CNSHA',
-    polName: '上海港',
-    pod: 'USNYC',
-    podName: '纽约港',
-    etd: '2026-04-22',
-    eta: '2026-05-28',
-    transitDays: 36,
-    capacity: 22920,
-    availableTeu: 450,
-    price: 4200,
-    status: 'filling',
-    cutoffTime: '04-19 18:00'
+    id: 'vs003', vesselName: 'CMA CGM Antoine', voyageNumber: 'AX261B', shippingLine: 'CMA CGM',
+    route: 'USEC', routeName: '美东航线',
+    pol: 'CNSHA', polName: '上海港', pod: 'USNYC', podName: '纽约港',
+    etd: '2026-04-22', eta: '2026-05-28', transitDays: 36,
+    capacity: 22920, availableTeu: 450, price: 4200, status: 'filling', cutoffTime: '04-19 18:00'
   },
   {
-    id: 'vs004',
-    vesselName: 'COSCO Universe',
-    voyageNumber: 'CX261C',
-    shippingLine: 'COSCO',
-    route: 'Shanghai-Dubai',
-    routeName: '上海-迪拜',
-    pol: 'CNSHA',
-    polName: '上海港',
-    pod: 'AEJEA',
-    podName: '杰贝阿里港',
-    etd: '2026-04-19',
-    eta: '2026-05-05',
-    transitDays: 16,
-    capacity: 20119,
-    availableTeu: 2100,
-    price: 1450,
-    status: 'open',
-    cutoffTime: '04-16 18:00'
+    id: 'vs004', vesselName: 'Maersk Seletar', voyageNumber: 'MS261G', shippingLine: 'Maersk',
+    route: 'SEA', routeName: '东南亚航线',
+    pol: 'CNSHA', polName: '上海港', pod: 'SGSIN', podName: '新加坡港',
+    etd: '2026-04-17', eta: '2026-04-23', transitDays: 6,
+    capacity: 16552, availableTeu: 4200, price: 580, status: 'open', cutoffTime: '04-16 12:00'
   },
   {
-    id: 'vs005',
-    vesselName: 'Hapag-Lloyd Berlin',
-    voyageNumber: 'HL261D',
-    shippingLine: 'Hapag-Lloyd',
-    route: 'Ningbo-Hamburg',
-    routeName: '宁波-汉堡',
-    pol: 'CNNBO',
-    polName: '宁波港',
-    pod: 'DEHAM',
-    podName: '汉堡港',
-    etd: '2026-04-21',
-    eta: '2026-05-22',
-    transitDays: 31,
-    capacity: 13198,
-    availableTeu: 680,
-    price: 2750,
-    status: 'open',
-    cutoffTime: '04-18 18:00'
+    id: 'vs005', vesselName: 'COSCO Galaxy', voyageNumber: 'CG261H', shippingLine: 'COSCO',
+    route: 'MED', routeName: '地中海航线',
+    pol: 'CNSHA', polName: '上海港', pod: 'ITGOA', podName: '热那亚港',
+    etd: '2026-04-19', eta: '2026-05-20', transitDays: 31,
+    capacity: 20119, availableTeu: 950, price: 2650, status: 'open', cutoffTime: '04-16 18:00'
   },
   {
-    id: 'vs006',
-    vesselName: 'MSC Ambra',
-    voyageNumber: 'WB261E',
-    shippingLine: 'MSC',
-    route: 'Shenzhen-Djibouti',
-    routeName: '深圳-吉布提',
-    pol: 'CNSZX',
-    polName: '深圳港',
-    pod: 'DJJIB',
-    podName: '吉布提港',
-    etd: '2026-04-23',
-    eta: '2026-05-18',
-    transitDays: 25,
-    capacity: 14700,
-    availableTeu: 320,
-    price: 1650,
-    status: 'filling',
-    cutoffTime: '04-20 18:00'
+    id: 'vs006', vesselName: 'COSCO Universe', voyageNumber: 'CX261C', shippingLine: 'COSCO',
+    route: 'MDE', routeName: '中东航线',
+    pol: 'CNSHA', polName: '上海港', pod: 'AEJEA', podName: '杰贝阿里港',
+    etd: '2026-04-19', eta: '2026-05-05', transitDays: 16,
+    capacity: 20119, availableTeu: 2100, price: 1450, status: 'open', cutoffTime: '04-16 18:00'
   },
   {
-    id: 'vs007',
-    vesselName: 'ONE Innovation',
-    voyageNumber: 'OI261F',
-    shippingLine: 'ONE',
-    route: 'Shenzhen-Antwerp',
-    routeName: '深圳-安特卫普',
-    pol: 'CNSZX',
-    polName: '深圳港',
-    pod: 'BEANR',
-    podName: '安特卫普港',
-    etd: '2026-04-24',
-    eta: '2026-05-30',
-    transitDays: 36,
-    capacity: 14070,
-    availableTeu: 950,
-    price: 2900,
-    status: 'open',
-    cutoffTime: '04-21 18:00'
+    id: 'vs007', vesselName: 'MSC Ambra', voyageNumber: 'WB261E', shippingLine: 'MSC',
+    route: 'DJI', routeName: '深圳-吉布提',
+    pol: 'CNSZX', polName: '深圳港', pod: 'DJJIB', podName: '吉布提港',
+    etd: '2026-04-23', eta: '2026-05-18', transitDays: 25,
+    capacity: 14700, availableTeu: 320, price: 1650, status: 'filling', cutoffTime: '04-20 18:00'
   },
   {
-    id: 'vs008',
-    vesselName: 'Maersk Seletar',
-    voyageNumber: 'MS261G',
-    shippingLine: 'Maersk',
-    route: 'Shanghai-Singapore',
-    routeName: '上海-新加坡',
-    pol: 'CNSHA',
-    polName: '上海港',
-    pod: 'SGSIN',
-    podName: '新加坡港',
-    etd: '2026-04-17',
-    eta: '2026-04-23',
-    transitDays: 6,
-    capacity: 16552,
-    availableTeu: 4200,
-    price: 580,
-    status: 'open',
-    cutoffTime: '04-16 12:00'
+    id: 'vs008', vesselName: 'ONE Innovation', voyageNumber: 'OI261F', shippingLine: 'ONE',
+    route: 'SA', routeName: '南美航线',
+    pol: 'HKGKG', polName: '香港港', pod: 'BRSSZ', podName: '桑托斯港',
+    etd: '2026-04-21', eta: '2026-05-28', transitDays: 37,
+    capacity: 14070, availableTeu: 680, price: 1850, status: 'open', cutoffTime: '04-18 18:00'
   }
 ];
 
@@ -830,6 +717,54 @@ export const forwarderRates: ForwarderRate[] = [
     discount: -5.8,
     remarks: '与土耳其清关行深度合作，伊斯坦布尔目的港熟悉'
   },
+  {
+    id: 'fw-mid-06',
+    company: '广州明达国际物流',
+    tier: 'mid',
+    route: 'SEA',
+    routeName: '东南亚航线',
+    price20gp: 480,
+    price40gp: 850,
+    price40hq: 880,
+    validFrom: '2026-04-14',
+    validTo: '2026-04-27',
+    serviceLevel: '东南亚专线 · 多港联动',
+    bookingContact: 'sea@mingda-logistics.com',
+    discount: -3.6,
+    remarks: '新加坡、曼谷、胡志明等多港口可接'
+  },
+  {
+    id: 'fw-mid-07',
+    company: '中东运通物流',
+    tier: 'mid',
+    route: 'MDE',
+    routeName: '中东航线',
+    price20gp: 1220,
+    price40gp: 2100,
+    price40hq: 2180,
+    validFrom: '2026-04-14',
+    validTo: '2026-04-27',
+    serviceLevel: '中东港口代理 · DDP服务',
+    bookingContact: 'mde@mideast-express.com',
+    discount: -4.2,
+    remarks: '杰贝阿里、吉达港有常驻代理'
+  },
+  {
+    id: 'fw-mid-08',
+    company: '拉美快线物流',
+    tier: 'mid',
+    route: 'SA',
+    routeName: '南美航线',
+    price20gp: 1650,
+    price40gp: 2850,
+    price40hq: 2950,
+    validFrom: '2026-04-14',
+    validTo: '2026-04-27',
+    serviceLevel: '南美专线 · 西语客服',
+    bookingContact: 'sa@latam-express.com',
+    discount: -2.8,
+    remarks: '桑托斯、布宜诺斯艾利斯双线运营'
+  },
   // ── 普通货代 ──────────────────────────────────────────────────────
   {
     id: 'fw-sml-01',
@@ -910,6 +845,54 @@ export const forwarderRates: ForwarderRate[] = [
     bookingContact: 'WeChat: fuyun_med',
     discount: -0.5,
     remarks: '报价含港杂，无隐性收费，适合新出口商'
+  },
+  {
+    id: 'fw-sml-06',
+    company: '东南亚专线小货代',
+    tier: 'small',
+    route: 'SEA',
+    routeName: '东南亚航线',
+    price20gp: 520,
+    price40gp: 900,
+    price40hq: 930,
+    validFrom: '2026-04-15',
+    validTo: '2026-04-21',
+    serviceLevel: '灵活接单 · 多港直达',
+    bookingContact: 'WeChat: sea_line',
+    discount: 1.2,
+    remarks: '可接拼箱，新加坡/曼谷/胡志明直达'
+  },
+  {
+    id: 'fw-sml-07',
+    company: '中东快递货运',
+    tier: 'small',
+    route: 'MDE',
+    routeName: '中东航线',
+    price20gp: 1350,
+    price40gp: 2320,
+    price40hq: 2400,
+    validFrom: '2026-04-15',
+    validTo: '2026-04-21',
+    serviceLevel: '快速报价 · 基础服务',
+    bookingContact: 'WeChat: mde_line',
+    discount: 0.5,
+    remarks: '迪拜杰贝阿里港专线'
+  },
+  {
+    id: 'fw-sml-08',
+    company: '南美之星货代',
+    tier: 'small',
+    route: 'SA',
+    routeName: '南美航线',
+    price20gp: 1780,
+    price40gp: 3080,
+    price40hq: 3180,
+    validFrom: '2026-04-15',
+    validTo: '2026-04-21',
+    serviceLevel: '南美专线 · 葡语/西语客服',
+    bookingContact: 'WeChat: sa_line',
+    discount: 1.8,
+    remarks: '桑托斯港清关经验丰富'
   }
 ];
 
@@ -925,7 +908,8 @@ export const routeRegions: Record<RouteRegion, { name: string; routes: string[] 
   america: { name: '美线', routes: ['USLAX', 'USNYC', 'USHOU'] },
   middle_east: { name: '中东', routes: ['AEJEA', 'SAJED', 'IRBND'] },
   mediterranean: { name: '地中海', routes: ['ITGOA', 'ESALG', 'GRPIR'] },
-  south_america: { name: '南美', routes: ['BRSSZ', 'CLSAI', 'PECAL'] }
+  south_america: { name: '南美', routes: ['BRSSZ', 'CLSAI', 'PECAL'] },
+  africa: { name: '非洲', routes: ['DJJIB', 'ETADD'] }
 };
 
 // 生成产品报价数据
@@ -1117,6 +1101,57 @@ export const rateComparisons: RateComparison[] = [
       { id: 'contract-us', source: 'contract', sourceName: '年度合约', sourceNameEn: 'Annual Contract', price20gp: 2450, price40gp: 4200, price40hq: 4350, discount: -12.5, validFrom: '2026-01-01', validTo: '2026-12-31', serviceLevel: '锁定运价 · 全年有效' }
     ],
     bestPrice: 4200, bestChannel: '年度合约', savings: 600
+  },
+  {
+    route: 'USEC', routeName: '美东航线', basePrice: 5200,
+    channels: [
+      { id: 'carrier-cma-usec', source: 'carrier', sourceName: 'CMA官网', sourceNameEn: 'CMA CGM Direct', price20gp: 3650, price40gp: 6400, price40hq: 6600, discount: 2.1, validFrom: '2026-04-14', validTo: '2026-04-21', serviceLevel: '官网直订 · 标准服务' },
+      { id: 'carrier-cosco-usec', source: 'carrier', sourceName: 'COSCO官网', sourceNameEn: 'COSCO Direct', price20gp: 3600, price40gp: 6350, price40hq: 6550, discount: 3.2, validFrom: '2026-04-14', validTo: '2026-04-21', serviceLevel: '官网直订 · 合约客户优先' },
+      { id: 'fw-top-kerry-usec', source: 'forwarder', sourceName: '嘉里物流', sourceNameEn: 'Kerry Logistics', price20gp: 3280, price40gp: 5800, price40hq: 5950, discount: -9.4, validFrom: '2026-04-14', validTo: '2026-04-27', serviceLevel: '全程可视化 · 美国清关', contact: 'booking-usec@kerrylogistics.com' },
+      { id: 'fw-mid-anneng-usec', source: 'forwarder', sourceName: '安能物流', sourceNameEn: 'Anneng', price20gp: 3450, price40gp: 6050, price40hq: 6200, discount: -3.7, validFrom: '2026-04-14', validTo: '2026-04-27', serviceLevel: 'FBA头程经验 · 末端派送', contact: 'intl@anneng.com' },
+      { id: 'contract-usec', source: 'contract', sourceName: '年度合约', sourceNameEn: 'Annual Contract', price20gp: 3200, price40gp: 5600, price40hq: 5800, discount: -14.3, validFrom: '2026-01-01', validTo: '2026-12-31', serviceLevel: '锁定运价 · 全年有效' }
+    ],
+    bestPrice: 5600, bestChannel: '年度合约', savings: 600
+  },
+  {
+    route: 'SEA', routeName: '东南亚航线', basePrice: 800,
+    channels: [
+      { id: 'carrier-pil-sea', source: 'carrier', sourceName: 'PIL官网', sourceNameEn: 'PIL Direct', price20gp: 520, price40gp: 900, price40hq: 930, discount: 1.2, validFrom: '2026-04-14', validTo: '2026-04-21', serviceLevel: '官网直订 · 东南亚专线' },
+      { id: 'carrier-cosco-sea', source: 'carrier', sourceName: 'COSCO官网', sourceNameEn: 'COSCO Direct', price20gp: 500, price40gp: 880, price40hq: 910, discount: 3.5, validFrom: '2026-04-14', validTo: '2026-04-21', serviceLevel: '官网直订 · 标准服务' },
+      { id: 'fw-mid-mingda-sea', source: 'forwarder', sourceName: '广州明达', sourceNameEn: 'Mingda Logistics', price20gp: 480, price40gp: 850, price40hq: 880, discount: -3.6, validFrom: '2026-04-14', validTo: '2026-04-27', serviceLevel: '东南亚专线 · 多港联动', contact: 'sea@mingda-logistics.com' },
+      { id: 'contract-sea', source: 'contract', sourceName: '年度合约', sourceNameEn: 'Annual Contract', price20gp: 450, price40gp: 800, price40hq: 830, discount: -15.0, validFrom: '2026-01-01', validTo: '2026-12-31', serviceLevel: '锁定运价 · 全年有效' }
+    ],
+    bestPrice: 800, bestChannel: '年度合约', savings: 100
+  },
+  {
+    route: 'MED', routeName: '地中海航线', basePrice: 3800,
+    channels: [
+      { id: 'carrier-msc-med', source: 'carrier', sourceName: 'MSC官网', sourceNameEn: 'MSC Direct', price20gp: 2200, price40gp: 3800, price40hq: 3900, discount: 1.5, validFrom: '2026-04-14', validTo: '2026-04-21', serviceLevel: '官网直订 · 标准服务' },
+      { id: 'carrier-cma-med', source: 'carrier', sourceName: 'CMA官网', sourceNameEn: 'CMA CGM Direct', price20gp: 2150, price40gp: 3750, price40hq: 3850, discount: 2.8, validFrom: '2026-04-14', validTo: '2026-04-21', serviceLevel: '官网直订 · 地中海优势' },
+      { id: 'fw-top-kn-med', source: 'forwarder', sourceName: '德迅', sourceNameEn: 'Kuehne+Nagel', price20gp: 2000, price40gp: 3450, price40hq: 3550, discount: -10.1, validFrom: '2026-04-14', validTo: '2026-04-27', serviceLevel: '欧洲本地网络 · SLA保障', contact: 'booking-med@kuehne-nagel.com.cn' },
+      { id: 'contract-med', source: 'contract', sourceName: '年度合约', sourceNameEn: 'Annual Contract', price20gp: 1900, price40gp: 3300, price40hq: 3400, discount: -17.1, validFrom: '2026-01-01', validTo: '2026-12-31', serviceLevel: '锁定运价 · 全年有效' }
+    ],
+    bestPrice: 3300, bestChannel: '年度合约', savings: 500
+  },
+  {
+    route: 'MDE', routeName: '中东航线', basePrice: 2100,
+    channels: [
+      { id: 'carrier-cosco-mde', source: 'carrier', sourceName: 'COSCO官网', sourceNameEn: 'COSCO Direct', price20gp: 1250, price40gp: 2150, price40hq: 2220, discount: 1.8, validFrom: '2026-04-14', validTo: '2026-04-21', serviceLevel: '官网直订 · 中东专线' },
+      { id: 'carrier-msc-mde', source: 'carrier', sourceName: 'MSC官网', sourceNameEn: 'MSC Direct', price20gp: 1280, price40gp: 2180, price40hq: 2250, discount: 0.3, validFrom: '2026-04-14', validTo: '2026-04-21', serviceLevel: '官网直订 · 标准服务' },
+      { id: 'fw-mid-mideast-mde', source: 'forwarder', sourceName: '中东运通', sourceNameEn: 'MidEast Express', price20gp: 1220, price40gp: 2100, price40hq: 2180, discount: -4.2, validFrom: '2026-04-14', validTo: '2026-04-27', serviceLevel: '中东港口代理 · DDP服务', contact: 'mde@mideast-express.com' },
+      { id: 'contract-mde', source: 'contract', sourceName: '年度合约', sourceNameEn: 'Annual Contract', price20gp: 1150, price40gp: 2000, price40hq: 2080, discount: -12.0, validFrom: '2026-01-01', validTo: '2026-12-31', serviceLevel: '锁定运价 · 全年有效' }
+    ],
+    bestPrice: 2000, bestChannel: '年度合约', savings: 150
+  },
+  {
+    route: 'SA', routeName: '南美航线', basePrice: 2800,
+    channels: [
+      { id: 'carrier-msc-sa', source: 'carrier', sourceName: 'MSC官网', sourceNameEn: 'MSC Direct', price20gp: 1700, price40gp: 2900, price40hq: 3000, discount: 2.1, validFrom: '2026-04-14', validTo: '2026-04-21', serviceLevel: '官网直订 · 南美专线' },
+      { id: 'carrier-maersk-sa', source: 'carrier', sourceName: '马士基官网', sourceNameEn: 'Maersk Direct', price20gp: 1680, price40gp: 2850, price40hq: 2950, discount: 2.9, validFrom: '2026-04-14', validTo: '2026-04-21', serviceLevel: '官网直订 · 标准服务' },
+      { id: 'fw-mid-latam-sa', source: 'forwarder', sourceName: '拉美快线', sourceNameEn: 'Latam Express', price20gp: 1650, price40gp: 2850, price40hq: 2950, discount: -2.8, validFrom: '2026-04-14', validTo: '2026-04-27', serviceLevel: '南美专线 · 西语客服', contact: 'sa@latam-express.com' },
+      { id: 'contract-sa', source: 'contract', sourceName: '年度合约', sourceNameEn: 'Annual Contract', price20gp: 1550, price40gp: 2680, price40hq: 2780, discount: -14.0, validFrom: '2026-01-01', validTo: '2026-12-31', serviceLevel: '锁定运价 · 全年有效' }
+    ],
+    bestPrice: 2680, bestChannel: '年度合约', savings: 220
   }
 ];
 
@@ -1279,6 +1314,12 @@ export const priceReferences: PriceReference[] = [
     forecast: { nextWeek: 590, nextMonth: 610, confidence: 82 }
   },
   {
+    route: 'MDE', routeName: '中东航线',
+    historicalTrend: { currentPrice: 1450, price1W: 1420, price1M: 1400, price3M: 1320, price6M: 1200, price1Y: 1050 },
+    marketReference: { lowestPrice: 1350, averagePrice: 1430, highestPrice: 1550, volume: 95000 },
+    forecast: { nextWeek: 1460, nextMonth: 1500, confidence: 72 }
+  },
+  {
     route: 'SA', routeName: '南美航线',
     historicalTrend: { currentPrice: 1850, price1W: 1920, price1M: 1880, price3M: 1750, price6M: 1580, price1Y: 1380 },
     marketReference: { lowestPrice: 1680, averagePrice: 1820, highestPrice: 1980, volume: 55000 },
@@ -1310,7 +1351,7 @@ export const routeClassifications = [
   {
     id: 'america',
     name: '美线',
-    code: 'US',
+    code: 'USWC/USEC',
     ports: ['洛杉矶港 USLAX', '长滩港 USLGB', '纽约港 USNYC', '休斯顿港 USHOU', '奥克兰港 USOAK'],
     countries: ['美国', '加拿大', '墨西哥'],
     features: ['美西(15-20天)', '美东(30-35天)', 'FBA头程需求大', '关税政策影响大']
@@ -1338,6 +1379,14 @@ export const routeClassifications = [
     ports: ['桑托斯港 BRSSZ', '圣安东尼奥港 CLSAI', '卡亚俄港 PECAL', '布宜诺斯艾利斯港 ARBUE'],
     countries: ['巴西', '智利', '秘鲁', '阿根廷', '哥伦比亚'],
     features: ['航程长(30-40天)', '旺季12-3月', '汇率风险大', '清关较复杂']
+  },
+  {
+    id: 'africa',
+    name: '非洲',
+    code: 'DJI',
+    ports: ['吉布提港 DJJIB', '亚的斯亚贝巴 ETADD'],
+    countries: ['吉布提', '埃塞俄比亚', '索马里', '厄立特里亚'],
+    features: ['航程(22-28天)', '亚吉铁路联运', '中转枢纽', '增长快速']
   }
 ];
 
