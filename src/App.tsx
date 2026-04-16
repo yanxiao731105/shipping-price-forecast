@@ -61,7 +61,7 @@ import {
   routeClassifications,
   shippingLineDirectory
 } from './data/mockData';
-import { loadLatestData, toFreightIndex, getDataTimestamp } from './services/dataService';
+import { loadCombinedData, toFreightIndex, getDataTimestamp } from './services/dataService';
 import type {
   FreightIndex,
   GeopoliticalFactor,
@@ -81,7 +81,7 @@ function App() {
   const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
-    loadLatestData().then(data => {
+    loadCombinedData().then(({ static: data }) => {
       setLatestData(data);
       setDataLoading(false);
     });
@@ -281,7 +281,7 @@ function OverviewTab({ indices, marketOverview: mo, mainRoutes: mr, latestData }
           <MacroCard
             title="USD/CNY 汇率"
             value={latestData.macro.exchangeRate.usdCny}
-            subtitle="中间价"
+            subtitle={`${latestData.macro.exchangeRate.source?.includes('实时') ? '🔄' : '📌'} 中间价`}
             change={-0.12}
           />
           <MacroCard
