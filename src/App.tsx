@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -20,13 +20,22 @@ import {
   Star,
   ChevronDown,
   ChevronUp,
-  Phone
+  Phone,
+  Package,
+  FileText,
+  Percent,
+  AlertCircle,
+  CheckCircle2,
+  Info,
+  RefreshCw
 } from 'lucide-react';
 import {
   LineChart,
   Line,
   AreaChart,
   Area,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -42,15 +51,49 @@ import {
   geopoliticalFactors,
   routeForecastData,
   bookingRecommendations,
-  shippingLines,
   vesselSchedules,
-  forwarderRates
+  forwarderRates,
+  routeProductQuotes,
+  routeSurcharges,
+  rateComparisons,
+  customsPolicies,
+  priceReferences,
+  routeClassifications,
+  shippingLineDirectory
 } from './data/mockData';
-import type { FreightIndex, GeopoliticalFactor, BookingRecommendation, RouteData, ShippingLine, VesselSchedule, ForwarderRate, ForwarderTier } from './types';
+import { loadLatestData, toFreightIndex, getDataTimestamp } from './services/dataService';
+import type {
+  FreightIndex,
+  GeopoliticalFactor,
+  BookingRecommendation,
+  RouteData,
+  VesselSchedule,
+  ForwarderRate,
+  ForwarderTier,
+  CargoCategory
+} from './types';
+import type { LatestData } from './services/dataService';
 
 function App() {
   const [selectedRoute, setSelectedRoute] = useState('EU');
-  const [activeTab, setActiveTab] = useState<'overview' | 'forecast' | 'recommendation' | 'forwarder' | 'schedule'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'forecast' | 'recommendation' | 'forwarder' | 'schedule' | 'quote' | 'customs'>('overview');
+  const [latestData, setLatestData] = useState<LatestData | null>(null);
+  const [dataLoading, setDataLoading] = useState(true);
+
+  useEffect(() => {
+    loadLatestData().then(data => {
+      setLatestData(data);
+      setDataLoading(false);
+    });
+  }, []);
+
+  // 用实时数据覆盖 mock 数据
+  const dynamicIndices: FreightIndex[] = latestData
+    ? [toFreightIndex(latestData.indices.scfi), toFreightIndex(latestData.indices.ccfi), ...freightIndices.slice(2)]
+    : freightIndices;
+
+  const dynamicMarketOverview = latestData?.marketOverview || marketOverview;
+  const dynamicMainRoutes = latestData?.mainRoutes?.length ? latestData.mainRoutes.map(r => ({ ...r, lastUpdate: latestData.meta.date })) : mainRoutes;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100">
@@ -68,16 +111,28 @@ function App() {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-sm font-medium">实时数据</span>
-              </div>
+              {dataLoading ? (
+                <div className="flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg border border-amber-200">
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <span className="text-sm font-medium">加载中...</span>
+                </div>
+              ) : latestData ? (
+                <div className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span className="text-sm font-medium">数据已更新</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg border border-amber-200">
+                  <AlertCircle className="w-4 h-4" />
+                  <span className="text-sm font-medium">离线模式</span>
+                </div>
+              )}
               <div className="text-right">
                 <div className="text-sm font-semibold text-slate-700">
                   {new Date().toLocaleDateString('zh-CN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                 </div>
                 <div className="text-xs text-slate-500">
-                  数据更新: {new Date().toLocaleTimeString('zh-CN')}
+                  {latestData ? `数据更新: ${getDataTimestamp(latestData)}` : `系统时间: ${new Date().toLocaleTimeString('zh-CN')}`}
                 </div>
               </div>
             </div>
@@ -88,13 +143,15 @@ function App() {
       {/* Navigation Tabs */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-[1600px] mx-auto px-6">
-          <div className="flex gap-1">
+          <div className="flex gap-1 overflow-x-auto">
             {[
               { id: 'overview', label: '市场概览', icon: BarChart3 },
               { id: 'forecast', label: '运价预测', icon: TrendingUp },
               { id: 'recommendation', label: '订舱建议', icon: Calendar },
               { id: 'forwarder', label: '货代运价', icon: Building2 },
-              { id: 'schedule', label: '船司+船期', icon: Anchor }
+              { id: 'schedule', label: '船司+船期', icon: Anchor },
+              { id: 'quote', label: '产品报价', icon: Package },
+              { id: 'customs', label: '清关政策', icon: FileText }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -115,7 +172,14 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-[1600px] mx-auto px-6 py-6 space-y-6">
-        {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'overview' && (
+          <OverviewTab 
+            indices={dynamicIndices} 
+            marketOverview={dynamicMarketOverview}
+            mainRoutes={dynamicMainRoutes}
+            latestData={latestData}
+          />
+        )}
         {activeTab === 'forecast' && (
           <ForecastTab
             selectedRoute={selectedRoute}
@@ -125,36 +189,65 @@ function App() {
         {activeTab === 'recommendation' && <RecommendationTab />}
         {activeTab === 'forwarder' && <ForwarderTab />}
         {activeTab === 'schedule' && <ScheduleTab />}
+        {activeTab === 'quote' && <QuoteTab />}
+        {activeTab === 'customs' && <CustomsTab />}
       </main>
+
+      {/* Footer 数据来源说明 */}
+      {latestData && (
+        <footer className="bg-white/60 border-t border-slate-200 py-4 mt-8">
+          <div className="max-w-[1600px] mx-auto px-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500">
+              <div className="flex items-center gap-4">
+                <span className="font-medium text-slate-600">数据来源：</span>
+                <span>SCFI — {latestData.meta.dataSource.scfi}</span>
+                <span>CCFI — {latestData.meta.dataSource.ccfi}</span>
+                <span>BDI — {latestData.meta.dataSource.bdi}</span>
+                <span>燃油 — {latestData.meta.dataSource.fuel}</span>
+              </div>
+              <span>{latestData.meta.dataSource.notes}</span>
+            </div>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
 
-// Market Overview Tab
-function OverviewTab() {
+// Market Overview Tab（增强版：宏观数据）
+function OverviewTab({ indices, marketOverview: mo, mainRoutes: mr, latestData }: { 
+  indices: FreightIndex[]; 
+  marketOverview: typeof marketOverview; 
+  mainRoutes: typeof mainRoutes;
+  latestData: LatestData | null;
+}) {
+  const bdiIndex: FreightIndex | undefined = latestData 
+    ? { ...toFreightIndex(latestData.indices.bdi) }
+    : undefined;
+
   return (
     <div className="space-y-6">
       {/* Market Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MarketCard
           title="SCFI 综合指数"
-          value={marketOverview.totalIndex.toFixed(2)}
-          change={marketOverview.totalIndexChange}
+          value={mo.totalIndex.toFixed(2)}
+          change={mo.totalIndexChange}
           trend="up"
           icon={Activity}
           color="blue"
         />
         <MarketCard
-          title="活跃航线数"
-          value={marketOverview.activeRoutes.toString()}
-          subtitle="条"
-          trend="stable"
+          title="BDI 干散货指数"
+          value={bdiIndex?.currentValue?.toLocaleString() || '1,685'}
+          change={bdiIndex?.change || -27}
+          trend={bdiIndex?.trend || 'down'}
           icon={Ship}
           color="emerald"
         />
         <MarketCard
           title="看涨信号"
-          value={marketOverview.bullishSignals.toString()}
+          value={mo.bullishSignals.toString()}
           subtitle="个"
           trend="up"
           icon={TrendingUp}
@@ -162,13 +255,43 @@ function OverviewTab() {
         />
         <MarketCard
           title="看跌信号"
-          value={marketOverview.bearishSignals.toString()}
+          value={mo.bearishSignals.toString()}
           subtitle="个"
           trend="down"
           icon={TrendingDown}
           color="red"
         />
       </div>
+
+      {/* 宏观指标行 */}
+      {latestData && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <MacroCard
+            title="IFO 380 燃油"
+            value={`$${latestData.macro.fuelPrice.ifo380}`}
+            subtitle={latestData.macro.fuelPrice.unit}
+            change={latestData.macro.fuelPrice.weekChange}
+          />
+          <MacroCard
+            title="VLSFO 低硫油"
+            value={`$${latestData.macro.fuelPrice.vlsfo}`}
+            subtitle={latestData.macro.fuelPrice.unit}
+            change={latestData.macro.fuelPrice.weekChange * 1.1}
+          />
+          <MacroCard
+            title="USD/CNY 汇率"
+            value={latestData.macro.exchangeRate.usdCny}
+            subtitle="中间价"
+            change={-0.12}
+          />
+          <MacroCard
+            title="新箱价格 20GP"
+            value={`$${latestData.macro.containerPrice.new20gp.toLocaleString()}`}
+            subtitle={latestData.macro.containerPrice.unit}
+            change={2.5}
+          />
+        </div>
+      )}
 
       {/* Index Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -178,32 +301,31 @@ function OverviewTab() {
               <h3 className="text-lg font-semibold text-slate-900">SCFI 上海出口集装箱运价指数</h3>
               <p className="text-sm text-slate-500 mt-1">Shanghai Container Freight Index</p>
             </div>
-            <IndexBadge index={freightIndices[0]} />
+            <IndexBadge index={indices[0]} />
           </div>
           <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={freightIndices[0].history}>
-                <defs>
-                  <linearGradient id="scfiGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="date" tick={{ fontSize: 12, fill: '#64748b' }} tickFormatter={(v) => v.slice(5)} />
-                <YAxis domain={['auto', 'auto']} tick={{ fontSize: 12, fill: '#64748b' }} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#fff',
-                    border: '1px solid #e2e8f0',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                  }}
-                  formatter={(value) => [Number(value).toLocaleString(), '指数值']}
-                />
-                <Area type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={2} fill="url(#scfiGradient)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            {indices[0]?.history?.length ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={indices[0].history}>
+                  <defs>
+                    <linearGradient id="scfiGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis dataKey="date" tick={{ fontSize: 12, fill: '#64748b' }} tickFormatter={(v) => v.slice(5)} />
+                  <YAxis domain={['auto', 'auto']} tick={{ fontSize: 12, fill: '#64748b' }} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    formatter={(value) => [Number(value).toLocaleString(), '指数值']}
+                  />
+                  <Area type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={2} fill="url(#scfiGradient)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex items-center justify-center h-full text-slate-400">暂无历史数据</div>
+            )}
           </div>
         </div>
 
@@ -213,32 +335,31 @@ function OverviewTab() {
               <h3 className="text-lg font-semibold text-slate-900">CCFI 中国出口集装箱运价指数</h3>
               <p className="text-sm text-slate-500 mt-1">China Container Freight Index</p>
             </div>
-            <IndexBadge index={freightIndices[1]} />
+            <IndexBadge index={indices[1]} />
           </div>
           <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={freightIndices[1].history}>
-                <defs>
-                  <linearGradient id="ccfiGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0891b2" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#0891b2" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="date" tick={{ fontSize: 12, fill: '#64748b' }} tickFormatter={(v) => v.slice(5)} />
-                <YAxis domain={['auto', 'auto']} tick={{ fontSize: 12, fill: '#64748b' }} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#fff',
-                    border: '1px solid #e2e8f0',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                  }}
-                  formatter={(value) => [Number(value).toLocaleString(), '指数值']}
-                />
-                <Area type="monotone" dataKey="value" stroke="#0891b2" strokeWidth={2} fill="url(#ccfiGradient)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            {indices[1]?.history?.length ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={indices[1].history}>
+                  <defs>
+                    <linearGradient id="ccfiGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#0891b2" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#0891b2" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis dataKey="date" tick={{ fontSize: 12, fill: '#64748b' }} tickFormatter={(v) => v.slice(5)} />
+                  <YAxis domain={['auto', 'auto']} tick={{ fontSize: 12, fill: '#64748b' }} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    formatter={(value) => [Number(value).toLocaleString(), '指数值']}
+                  />
+                  <Area type="monotone" dataKey="value" stroke="#0891b2" strokeWidth={2} fill="url(#ccfiGradient)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex items-center justify-center h-full text-slate-400">暂无历史数据</div>
+            )}
           </div>
         </div>
       </div>
@@ -259,7 +380,7 @@ function OverviewTab() {
                 </tr>
               </thead>
               <tbody>
-                {mainRoutes.map((route) => (
+                {(mr.length ? mr : mainRoutes).map((route) => (
                   <tr key={route.route} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
@@ -579,6 +700,30 @@ function RecommendationTab() {
 }
 
 // Helper Components
+
+// 宏观指标卡片
+function MacroCard({ title, value, subtitle, change }: {
+  title: string;
+  value: string;
+  subtitle?: string;
+  change: number;
+}) {
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-sm transition-shadow">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-slate-500">{title}</span>
+        <span className={`text-xs font-medium ${change >= 0 ? 'text-red-500' : 'text-green-500'}`}>
+          {change >= 0 ? '+' : ''}{change.toFixed(1)}%
+        </span>
+      </div>
+      <div className="flex items-end gap-2">
+        <span className="text-lg font-bold text-slate-900 font-mono">{value}</span>
+        {subtitle && <span className="text-xs text-slate-400 mb-0.5">{subtitle}</span>}
+      </div>
+    </div>
+  );
+}
+
 function MarketCard({ title, value, change, trend, icon: Icon, color, subtitle }: {
   title: string;
   value: string;
@@ -1146,7 +1291,7 @@ function ForwarderCompareTable({ route, rates }: { route: string; rates: Forward
   );
 }
 
-// Schedule Tab - 船公司 + 船期
+// Schedule Tab - 船公司 + 船期（增强版：截关时间）
 function ScheduleTab() {
   const [selectedRoute, setSelectedRoute] = useState('all');
 
@@ -1158,19 +1303,66 @@ function ScheduleTab() {
 
   return (
     <div className="space-y-6">
+      {/* 航线分类卡片 */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Globe className="w-6 h-6 text-blue-600" />
+          <h3 className="text-lg font-semibold text-slate-900">航线分类</h3>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          {routeClassifications.map((region) => (
+            <div key={region.id} className="p-3 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="font-semibold text-slate-900">{region.name}</span>
+              </div>
+              <p className="text-xs text-slate-500">{region.code}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Shipping Lines */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
         <div className="flex items-center gap-3 mb-6">
           <Users className="w-6 h-6 text-slate-600" />
-          <h3 className="text-lg font-semibold text-slate-900">主要船公司</h3>
+          <h3 className="text-lg font-semibold text-slate-900">船公司名录</h3>
           <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
-            {shippingLines.length} 家
+            {shippingLineDirectory.length} 家
           </span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {shippingLines.map((line) => (
-            <ShippingLineCard key={line.code} line={line} />
-          ))}
+          {shippingLineDirectory.map((line) => {
+            const allianceColors: Record<string, string> = {
+              '2M': 'bg-blue-100 text-blue-700',
+              'Ocean Alliance': 'bg-green-100 text-green-700',
+              'The Alliance': 'bg-purple-100 text-purple-700',
+              '独立': 'bg-slate-100 text-slate-700'
+            };
+            return (
+              <div key={line.code} className="p-4 rounded-xl border border-slate-200 hover:shadow-md transition-all cursor-pointer">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                      <Ship className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <span className="font-semibold text-slate-900">{line.code}</span>
+                      <p className="text-xs text-slate-500">{line.nameEn}</p>
+                    </div>
+                  </div>
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${allianceColors[line.alliance]}`}>
+                    {line.alliance}
+                  </span>
+                </div>
+                <p className="text-sm text-slate-700 mb-2">{line.name}</p>
+                <div className="flex flex-wrap gap-1">
+                  {line.features.slice(0, 2).map(f => (
+                    <span key={f} className="px-2 py-0.5 bg-slate-50 rounded text-xs text-slate-600">{f}</span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -1184,21 +1376,27 @@ function ScheduleTab() {
               {filteredSchedules.length} 艘船
             </span>
           </div>
-          <select
-            value={selectedRoute}
-            onChange={(e) => setSelectedRoute(e.target.value)}
-            className="px-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="all">全部航线</option>
-            {uniqueRoutes.map((route) => {
-              const schedule = vesselSchedules.find(s => s.route === route);
-              return (
-                <option key={route} value={route}>
-                  {schedule?.routeName || route}
-                </option>
-              );
-            })}
-          </select>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-xs text-slate-500">
+              <Clock className="w-4 h-4 text-red-500" />
+              <span>截关时间以当地时间为准</span>
+            </div>
+            <select
+              value={selectedRoute}
+              onChange={(e) => setSelectedRoute(e.target.value)}
+              className="px-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">全部航线</option>
+              {uniqueRoutes.map((route) => {
+                const schedule = vesselSchedules.find(s => s.route === route);
+                return (
+                  <option key={route} value={route}>
+                    {schedule?.routeName || route}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
         </div>
 
         {/* Schedule Table */}
@@ -1206,7 +1404,7 @@ function ScheduleTab() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-200">
-                <th className="text-left py-3 px-4 text-sm font-semibold text-slate-600">船名</th>
+                <th className="text-left py-3 px-4 text-sm font-semibold text-slate-600">船名/航次</th>
                 <th className="text-left py-3 px-4 text-sm font-semibold text-slate-600">船司</th>
                 <th className="text-left py-3 px-4 text-sm font-semibold text-slate-600">航线</th>
                 <th className="text-center py-3 px-4 text-sm font-semibold text-slate-600">开航日期</th>
@@ -1215,6 +1413,7 @@ function ScheduleTab() {
                 <th className="text-right py-3 px-4 text-sm font-semibold text-slate-600">可用舱位</th>
                 <th className="text-right py-3 px-4 text-sm font-semibold text-slate-600">运价</th>
                 <th className="text-center py-3 px-4 text-sm font-semibold text-slate-600">状态</th>
+                <th className="text-center py-3 px-4 text-sm font-semibold text-red-600">截关时间</th>
               </tr>
             </thead>
             <tbody>
@@ -1224,51 +1423,18 @@ function ScheduleTab() {
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
-  );
-}
 
-function ShippingLineCard({ line }: { line: ShippingLine }) {
-  const allianceColors: Record<string, string> = {
-    '2M': 'bg-blue-100 text-blue-700',
-    'Ocean Alliance': 'bg-green-100 text-green-700',
-    'The Alliance': 'bg-purple-100 text-purple-700',
-    '独立': 'bg-slate-100 text-slate-700'
-  };
-
-  return (
-    <div className="p-4 rounded-xl border border-slate-200 hover:shadow-md transition-all cursor-pointer">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
-            <Ship className="w-5 h-5 text-white" />
+        {/* 说明 */}
+        <div className="mt-4 p-3 bg-amber-50 rounded-lg flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-amber-800">
+            <p><strong>舱位状态说明：</strong></p>
+            <ul className="mt-1 space-y-0.5 text-amber-700">
+              <li>• <span className="inline-flex items-center gap-1"><span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span> 可订舱</span> - 舱位充足，可正常预订</li>
+              <li>• <span className="inline-flex items-center gap-1"><span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span> 即将满载</span> - 舱位紧张，建议尽快预订</li>
+              <li>• <span className="inline-flex items-center gap-1"><span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span> 已满载</span> - 舱位已满，可加入等待队列</li>
+            </ul>
           </div>
-          <div>
-            <h4 className="font-semibold text-slate-900">{line.name}</h4>
-            <p className="text-xs text-slate-500">{line.code}</p>
-          </div>
-        </div>
-        <span className={`px-2 py-1 rounded text-xs font-medium ${allianceColors[line.alliance]}`}>
-          {line.alliance}
-        </span>
-      </div>
-      <div className="grid grid-cols-2 gap-3 mt-4">
-        <div>
-          <p className="text-xs text-slate-500">市场份额</p>
-          <p className="font-mono font-semibold text-slate-900">{line.marketShare}%</p>
-        </div>
-        <div>
-          <p className="text-xs text-slate-500">船队规模</p>
-          <p className="font-mono font-semibold text-slate-900">{line.vesselCount} 艘</p>
-        </div>
-        <div>
-          <p className="text-xs text-slate-500">总运力</p>
-          <p className="font-mono font-semibold text-slate-900">{line.totalCapacity}M TEU</p>
-        </div>
-        <div>
-          <p className="text-xs text-slate-500">周航班</p>
-          <p className="font-mono font-semibold text-slate-900">{line.weeklySailings} 班</p>
         </div>
       </div>
     </div>
@@ -1338,7 +1504,532 @@ function VesselScheduleRow({ schedule }: { schedule: VesselSchedule }) {
           {status.label}
         </span>
       </td>
+      {schedule.cutoffTime && (
+        <td className="py-4 px-4 text-center">
+          <span className="text-sm font-mono text-red-600">{schedule.cutoffTime}</span>
+        </td>
+      )}
     </tr>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 产品报价 Tab
+// ─────────────────────────────────────────────────────────────────────────────
+function QuoteTab() {
+  const [selectedRoute, setSelectedRoute] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState<CargoCategory | 'all'>('all');
+
+  const categoryConfig: Record<string, { label: string; color: string; bg: string }> = {
+    all: { label: '全部箱型', color: 'text-slate-600', bg: 'bg-slate-100' },
+    general: { label: '普货', color: 'text-blue-700', bg: 'bg-blue-50' },
+    dangerous: { label: '危险品', color: 'text-red-700', bg: 'bg-red-50' },
+    oversize: { label: '超限货', color: 'text-amber-700', bg: 'bg-amber-50' }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* 说明 Banner */}
+      <div className="bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl p-5 text-white flex items-start gap-4">
+        <Package className="w-8 h-8 flex-shrink-0 mt-0.5" />
+        <div>
+          <h2 className="text-lg font-bold mb-1">产品报价体系</h2>
+          <p className="text-sm text-purple-100">
+            包含普货、危险品、超限货三大类箱型报价，支持 20GP/40HQ/45HQ/20OT/40OT/20FR/40FR 等多种箱型，
+            附加费明细透明化，支持多渠道运价对比
+          </p>
+        </div>
+      </div>
+
+      {/* 航线分类 */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <h3 className="text-lg font-semibold text-slate-900 mb-4">航线分类</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {routeClassifications.map((region) => (
+            <div key={region.id} className="p-4 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 hover:shadow-md transition-all cursor-pointer">
+              <div className="flex items-center gap-2 mb-2">
+                <Globe className="w-5 h-5 text-blue-600" />
+                <span className="font-semibold text-slate-900">{region.name}</span>
+              </div>
+              <p className="text-xs text-slate-500 mb-2">{region.countries.slice(0, 3).join('、')}</p>
+              <div className="flex flex-wrap gap-1">
+                {region.features.slice(0, 2).map(f => (
+                  <span key={f} className="px-1.5 py-0.5 bg-white/60 rounded text-xs text-slate-600">{f}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 航线与货型筛选 */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+        <div className="flex flex-wrap gap-4">
+          <div>
+            <label className="text-xs text-slate-500 mb-2 block">选择航线</label>
+            <select
+              value={selectedRoute}
+              onChange={(e) => setSelectedRoute(e.target.value)}
+              className="px-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm font-medium text-slate-700"
+            >
+              <option value="all">全部航线</option>
+              {routeProductQuotes.map(r => (
+                <option key={r.route} value={r.route}>{r.routeName}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-end gap-2">
+            {Object.entries(categoryConfig).map(([key, config]) => (
+              <button
+                key={key}
+                onClick={() => setSelectedCategory(key as CargoCategory | 'all')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${selectedCategory === key ? `${config.bg} ${config.color}` : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+              >
+                {config.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 附加费明细 */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <DollarSign className="w-6 h-6 text-emerald-600" />
+          <h3 className="text-lg font-semibold text-slate-900">附加费明细</h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-slate-200">
+                <th className="text-left py-3 px-4 text-sm font-semibold text-slate-600">附加费项目</th>
+                <th className="text-left py-3 px-4 text-sm font-semibold text-slate-600">英文名</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-slate-600">费率</th>
+                <th className="text-left py-3 px-4 text-sm font-semibold text-slate-600">单位</th>
+                <th className="text-left py-3 px-4 text-sm font-semibold text-slate-600">说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              {routeSurcharges.find(r => r.route === selectedRoute || selectedRoute === 'all')?.surcharges.map(s => (
+                <tr key={s.id} className="border-b border-slate-100 hover:bg-slate-50">
+                  <td className="py-3 px-4">
+                    <span className="font-medium text-slate-900">{s.name}</span>
+                  </td>
+                  <td className="py-3 px-4 text-sm text-slate-500">{s.nameEn}</td>
+                  <td className="py-3 px-4 text-right">
+                    <span className="font-mono font-semibold text-emerald-600">
+                      {s.unit === 'percentage' ? `${s.amount}%` : `$${s.amount}`}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 text-sm text-slate-500">
+                    {s.unit === 'per_teu' ? '/TEU' : s.unit === 'per_container' ? '/箱' : s.unit === 'per_bill' ? '/票' : '%'}
+                  </td>
+                  <td className="py-3 px-4 text-sm text-slate-600">{s.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* 多渠道运价对比 */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <BarChart3 className="w-6 h-6 text-blue-600" />
+          <h3 className="text-lg font-semibold text-slate-900">多渠道运价对比</h3>
+          <span className="text-xs text-slate-400">船司官网 / 货代合作价 / 合约价</span>
+        </div>
+        <div className="space-y-6">
+          {rateComparisons.filter(r => r.route === selectedRoute || selectedRoute === 'all').map((comparison) => (
+            <div key={comparison.route}>
+              <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-slate-400" />
+                {comparison.routeName}
+                <span className="text-xs font-normal text-slate-500 ml-2">基准价: ${comparison.basePrice}/TEU</span>
+              </h4>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-slate-200">
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-slate-600">渠道</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-slate-600">来源</th>
+                      <th className="text-right py-2 px-3 text-xs font-semibold text-slate-600">20GP</th>
+                      <th className="text-right py-2 px-3 text-xs font-semibold text-slate-600">40GP</th>
+                      <th className="text-right py-2 px-3 text-xs font-semibold text-slate-600">40HQ</th>
+                      <th className="text-right py-2 px-3 text-xs font-semibold text-slate-600">vs 基准</th>
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-slate-600">服务</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {comparison.channels.map((channel) => {
+                      const sourceColors: Record<string, string> = {
+                        carrier: 'bg-blue-100 text-blue-700',
+                        forwarder: 'bg-emerald-100 text-emerald-700',
+                        contract: 'bg-purple-100 text-purple-700'
+                      };
+                      const sourceLabels: Record<string, string> = {
+                        carrier: '船司官网',
+                        forwarder: '货代合作',
+                        contract: '合约价'
+                      };
+                      return (
+                        <tr key={channel.id} className="border-b border-slate-100 hover:bg-slate-50">
+                          <td className="py-2 px-3">
+                            <span className="font-medium text-slate-900 text-sm">{channel.sourceName}</span>
+                          </td>
+                          <td className="py-2 px-3">
+                            <span className={`px-2 py-0.5 rounded text-xs font-medium ${sourceColors[channel.source]}`}>
+                              {sourceLabels[channel.source]}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3 text-right font-mono text-sm">${channel.price20gp.toLocaleString()}</td>
+                          <td className="py-2 px-3 text-right font-mono font-semibold text-sm">${channel.price40gp.toLocaleString()}</td>
+                          <td className="py-2 px-3 text-right font-mono text-sm">${channel.price40hq.toLocaleString()}</td>
+                          <td className="py-2 px-3 text-right">
+                            <span className={`font-mono text-xs font-semibold px-1.5 py-0.5 rounded ${
+                              channel.discount < 0 ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                            }`}>
+                              {channel.discount > 0 ? `+${channel.discount}%` : `${channel.discount}%`}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3 text-xs text-slate-500">{channel.serviceLevel}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div className="mt-3 p-3 bg-green-50 rounded-lg flex items-center justify-between">
+                <span className="text-sm text-slate-600">最优选择: <span className="font-semibold text-emerald-700">{comparison.bestChannel}</span></span>
+                <span className="text-sm font-semibold text-emerald-700">节省 $${comparison.savings}/箱</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 价格参考维度 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* 运价历史走势 */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <TrendingUp className="w-6 h-6 text-blue-600" />
+            <h3 className="text-lg font-semibold text-slate-900">运价历史走势</h3>
+          </div>
+          <div className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={priceReferences.filter(r => r.route === selectedRoute || selectedRoute === 'all').map(r => ({
+                name: r.routeName,
+                current: r.historicalTrend.currentPrice,
+                '1W前': r.historicalTrend.price1W,
+                '1月前': r.historicalTrend.price1M,
+                '1年前': r.historicalTrend.price1Y
+              }))}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} tickFormatter={(v) => `$${v}`} />
+                <Tooltip formatter={(value) => [`$${Number(value).toLocaleString()}`, '']} />
+                <Bar dataKey="current" fill="#2563eb" name="当前" />
+                <Bar dataKey="1W前" fill="#94a3b8" name="1周前" />
+                <Bar dataKey="1月前" fill="#64748b" name="1月前" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* 市场参考价 */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Activity className="w-6 h-6 text-emerald-600" />
+            <h3 className="text-lg font-semibold text-slate-900">近期市场价格参考</h3>
+          </div>
+          <div className="space-y-4">
+            {priceReferences.filter(r => r.route === selectedRoute || selectedRoute === 'all').map((ref) => (
+              <div key={ref.route} className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-semibold text-slate-900">{ref.routeName}</span>
+                  <span className="text-xs text-slate-500">货量: {ref.marketReference.volume.toLocaleString()} TEU</span>
+                </div>
+                <div className="grid grid-cols-3 gap-3 mb-3">
+                  <div className="text-center">
+                    <p className="text-xs text-slate-500 mb-1">最低价</p>
+                    <p className="font-mono font-semibold text-emerald-600">${ref.marketReference.lowestPrice.toLocaleString()}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-slate-500 mb-1">均价</p>
+                    <p className="font-mono font-semibold text-slate-700">${ref.marketReference.averagePrice.toLocaleString()}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-slate-500 mb-1">最高价</p>
+                    <p className="font-mono font-semibold text-red-600">${ref.marketReference.highestPrice.toLocaleString()}</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-500">下周预测: <span className="font-semibold text-blue-600">${ref.forecast.nextWeek.toLocaleString()}</span></span>
+                  <span className="text-slate-500">置信度: <span className="font-semibold text-slate-700">{ref.forecast.confidence}%</span></span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 船公司名录 */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Users className="w-6 h-6 text-slate-600" />
+          <h3 className="text-lg font-semibold text-slate-900">船公司名录</h3>
+          <span className="text-xs text-slate-400">MSK / MSC / CMA / ONE / COSCO / HPL / EVG / YML / PIL / ZIM</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+          {shippingLineDirectory.map((line) => {
+            const allianceColors: Record<string, string> = {
+              '2M': 'bg-blue-100 text-blue-700',
+              'Ocean Alliance': 'bg-green-100 text-green-700',
+              'The Alliance': 'bg-purple-100 text-purple-700',
+              '独立': 'bg-slate-100 text-slate-700'
+            };
+            return (
+              <div key={line.code} className="p-4 rounded-xl border border-slate-200 hover:shadow-md transition-all cursor-pointer">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                      <Ship className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <span className="font-semibold text-slate-900">{line.code}</span>
+                      <p className="text-xs text-slate-500">{line.nameEn}</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-slate-700 mb-2">{line.name}</p>
+                <span className={`px-2 py-0.5 rounded text-xs font-medium ${allianceColors[line.alliance]}`}>
+                  {line.alliance}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 清关政策 Tab
+// ─────────────────────────────────────────────────────────────────────────────
+function CustomsTab() {
+  const [selectedCountry, setSelectedCountry] = useState('all');
+
+  const filteredPolicies = selectedCountry === 'all' ? customsPolicies : customsPolicies.filter(p => p.country === selectedCountry);
+  const countries = [...new Set(customsPolicies.map(p => p.country))];
+
+  const regionColors: Record<string, string> = {
+    europe: 'bg-blue-100 text-blue-700',
+    america: 'bg-emerald-100 text-emerald-700',
+    middle_east: 'bg-amber-100 text-amber-700',
+    south_america: 'bg-purple-100 text-purple-700',
+    origin: 'bg-slate-100 text-slate-700'
+  };
+
+  const regionNames: Record<string, string> = {
+    europe: '欧洲',
+    america: '美洲',
+    middle_east: '中东/非洲',
+    south_america: '南美',
+    origin: '中国出口'
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* 说明 Banner */}
+      <div className="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-5 text-white flex items-start gap-4">
+        <FileText className="w-8 h-8 flex-shrink-0 mt-0.5" />
+        <div>
+          <h2 className="text-lg font-bold mb-1">清关政策与关税</h2>
+          <p className="text-sm text-amber-100">
+            各国进口关税税率参考，包含关税率、增值税率、清关天数、特殊要求等关键信息。
+            数据仅供参考，实际税率以各国海关官方公布为准
+          </p>
+        </div>
+      </div>
+
+      {/* 国家筛选 */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+        <div className="flex items-center gap-3 overflow-x-auto">
+          <button
+            onClick={() => setSelectedCountry('all')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
+              selectedCountry === 'all' ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            全部国家
+          </button>
+          {countries.map(country => (
+            <button
+              key={country}
+              onClick={() => setSelectedCountry(country)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
+                selectedCountry === country ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {country}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 清关政策卡片 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {filteredPolicies.map((policy) => (
+          <div key={`${policy.country}-${policy.port}`} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+                  <Globe className="w-5 h-5 text-slate-400" />
+                  {policy.country} - {policy.port}
+                </h3>
+                <p className="text-sm text-slate-500">{policy.portCode}</p>
+              </div>
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${regionColors[policy.region]}`}>
+                {regionNames[policy.region]}
+              </span>
+            </div>
+
+            {/* 基本信息 */}
+            <div className="grid grid-cols-3 gap-4 mb-4 p-3 bg-slate-50 rounded-lg">
+              <div className="text-center">
+                <p className="text-xs text-slate-500 mb-1">清关费用</p>
+                <p className="font-mono font-semibold text-slate-900">${policy.customsClearanceFee}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xs text-slate-500 mb-1">清关天数</p>
+                <p className="font-mono font-semibold text-slate-900">{policy.clearanceDays}天</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xs text-slate-500 mb-1">更新时间</p>
+                <p className="font-mono font-semibold text-slate-900">{policy.lastUpdate}</p>
+              </div>
+            </div>
+
+            {/* 特殊要求 */}
+            {policy.specialRequirements && (
+              <div className="mb-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-amber-800">{policy.specialRequirements}</p>
+                </div>
+              </div>
+            )}
+
+            {/* 关税税率表 */}
+            <div>
+              <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                <Percent className="w-4 h-4" />
+                关税税率参考
+              </h4>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-200">
+                      <th className="text-left py-2 px-2 text-xs font-semibold text-slate-600">HS编码</th>
+                      <th className="text-left py-2 px-2 text-xs font-semibold text-slate-600">商品描述</th>
+                      <th className="text-right py-2 px-2 text-xs font-semibold text-slate-600">关税率</th>
+                      <th className="text-right py-2 px-2 text-xs font-semibold text-slate-600">增值税率</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {policy.tariffs.slice(0, 5).map((tariff, idx) => (
+                      <tr key={idx} className="border-b border-slate-100">
+                        <td className="py-2 px-2 font-mono text-xs text-slate-600">{tariff.hsCode}</td>
+                        <td className="py-2 px-2 text-xs text-slate-700">{tariff.description}</td>
+                        <td className="py-2 px-2 text-right">
+                          <span className={`font-mono font-semibold ${tariff.dutyRate === 0 ? 'text-emerald-600' : 'text-slate-900'}`}>
+                            {tariff.dutyRate}%
+                          </span>
+                        </td>
+                        <td className="py-2 px-2 text-right font-mono text-slate-700">{tariff.vatRate}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* 关税计算示例 */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Calculator className="w-6 h-6 text-blue-600" />
+          <h3 className="text-lg font-semibold text-slate-900">关税计算示例</h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-slate-200">
+                <th className="text-left py-3 px-4 text-sm font-semibold text-slate-600">HS编码</th>
+                <th className="text-left py-3 px-4 text-sm font-semibold text-slate-600">商品</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-slate-600">FOB货值</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-slate-600">运费</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-slate-600">保险费</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-slate-600">关税</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-slate-600">增值税</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-slate-600">清关杂费</th>
+                <th className="text-right py-3 px-4 text-sm font-semibold text-slate-600">合计成本</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { hs: '8471.30', name: '笔记本电脑', fob: 50000, freight: 2000, insurance: 500, duty: 0, vat: 6500, fee: 500 },
+                { hs: '8517.12', name: '智能手机', fob: 30000, freight: 1500, insurance: 300, duty: 0, vat: 3900, fee: 500 },
+                { hs: '6204.62', name: '棉质女裤', fob: 10000, freight: 500, insurance: 100, duty: 1200, vat: 1363, fee: 300 },
+                { hs: '8703.23', name: '汽车(2000cc)', fob: 200000, freight: 8000, insurance: 2000, duty: 30000, vat: 29600, fee: 800 }
+              ].map((item, idx) => {
+                const cif = item.fob + item.freight + item.insurance;
+                const total = cif + item.duty + item.vat + item.fee;
+                return (
+                  <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+                    <td className="py-3 px-4 font-mono text-sm text-slate-600">{item.hs}</td>
+                    <td className="py-3 px-4 text-sm text-slate-900">{item.name}</td>
+                    <td className="py-3 px-4 text-right font-mono text-sm">${item.fob.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right font-mono text-sm">${item.freight.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right font-mono text-sm">${item.insurance.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right font-mono text-sm text-red-600">${item.duty.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right font-mono text-sm text-orange-600">${item.vat.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right font-mono text-sm text-slate-600">${item.fee.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-right font-mono font-semibold text-slate-900">${total.toLocaleString()}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-slate-400 mt-3 flex items-center gap-1">
+          <Info className="w-3 h-3" />
+          关税 = (FOB + 运费 + 保险) × 关税率；增值税 = (CIF + 关税) × 增值税率
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// Calculator icon helper (inline)
+function Calculator({ className }: { className?: string }) {
+  return (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="16" height="20" x="4" y="2" rx="2"/>
+      <line x1="8" x2="16" y1="6" y2="6"/>
+      <line x1="16" x2="16" y1="14" y2="18"/>
+      <path d="M16 10h.01"/>
+      <path d="M12 10h.01"/>
+      <path d="M8 10h.01"/>
+      <path d="M12 14h.01"/>
+      <path d="M8 14h.01"/>
+      <path d="M12 18h.01"/>
+      <path d="M8 18h.01"/>
+    </svg>
   );
 }
 

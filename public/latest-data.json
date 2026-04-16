@@ -1,0 +1,253 @@
+{
+  "meta": {
+    "updatedAt": "2026-04-16T09:01:24.842Z",
+    "date": "2026-04-16",
+    "version": "2.0",
+    "dataSource": {
+      "scfi": "上海航运交易所（模拟）",
+      "ccfi": "交通运输部（模拟）",
+      "bdi": "波罗的海交易所",
+      "fuel": "EIA / 普氏",
+      "cny": "中国人民银行中间价",
+      "freightRates": "市场综合参考价（FAK）",
+      "notes": "运价数据为市场参考值，以船公司/货代最终确认为准"
+    }
+  },
+  "indices": {
+    "scfi": {
+      "name": "上海出口集装箱运价指数",
+      "code": "SCFI",
+      "currentValue": 2148,
+      "previousValue": 2098,
+      "change": 50,
+      "changePercent": 2.38,
+      "trend": "up",
+      "history": [
+        {
+          "date": "2026-03-20",
+          "value": 2011
+        },
+        {
+          "date": "2026-03-27",
+          "value": 2174
+        },
+        {
+          "date": "2026-04-03",
+          "value": 2281
+        },
+        {
+          "date": "2026-04-10",
+          "value": 2248
+        }
+      ],
+      "source": "上海航运交易所",
+      "note": "每周五发布"
+    },
+    "ccfi": {
+      "name": "中国出口集装箱运价指数",
+      "code": "CCFI",
+      "currentValue": 1456,
+      "previousValue": 1432,
+      "change": 24,
+      "changePercent": 1.68,
+      "trend": "up",
+      "history": [
+        {
+          "date": "2026-03-20",
+          "value": 1410
+        },
+        {
+          "date": "2026-03-27",
+          "value": 1479
+        },
+        {
+          "date": "2026-04-03",
+          "value": 1548
+        },
+        {
+          "date": "2026-04-10",
+          "value": 1550
+        }
+      ],
+      "source": "交通运输部",
+      "note": "每周五发布"
+    },
+    "bdi": {
+      "name": "波罗的海干散货指数",
+      "code": "BDI",
+      "currentValue": 1685,
+      "previousValue": 1712,
+      "change": -27,
+      "changePercent": -1.58,
+      "trend": "down",
+      "history": [
+        {
+          "date": "2026-03-18",
+          "value": 1518
+        },
+        {
+          "date": "2026-03-20",
+          "value": 1506
+        },
+        {
+          "date": "2026-03-23",
+          "value": 1518
+        },
+        {
+          "date": "2026-03-25",
+          "value": 1563
+        },
+        {
+          "date": "2026-03-27",
+          "value": 1566
+        },
+        {
+          "date": "2026-03-30",
+          "value": 1617
+        },
+        {
+          "date": "2026-04-01",
+          "value": 1641
+        },
+        {
+          "date": "2026-04-03",
+          "value": 1665
+        },
+        {
+          "date": "2026-04-06",
+          "value": 1731
+        },
+        {
+          "date": "2026-04-08",
+          "value": 1775
+        },
+        {
+          "date": "2026-04-10",
+          "value": 1789
+        },
+        {
+          "date": "2026-04-13",
+          "value": 1833
+        },
+        {
+          "date": "2026-04-15",
+          "value": 1841
+        }
+      ],
+      "source": "波罗的海交易所",
+      "note": "每个工作日发布"
+    }
+  },
+  "macro": {
+    "fuelPrice": {
+      "ifo380": 612,
+      "vlsfo": 685,
+      "unit": "USD/MT",
+      "trend": "stable",
+      "weekChange": -3.2
+    },
+    "exchangeRate": {
+      "usdCny": "0.1464",
+      "eurCny": null,
+      "date": "2026-04-16"
+    },
+    "containerPrice": {
+      "new20gp": 2350,
+      "new40hq": 3850,
+      "used20gp": 1650,
+      "used40hq": 2800,
+      "unit": "USD"
+    }
+  },
+  "marketOverview": {
+    "totalIndex": 2148,
+    "totalIndexChange": 2.38,
+    "activeRoutes": 24,
+    "bullishSignals": 8,
+    "bearishSignals": 5,
+    "overallTrend": "bullish"
+  },
+  "mainRoutes": [
+    {
+      "route": "Shanghai-Rotterdam",
+      "routeName": "上海-鹿特丹",
+      "currentPrice": 2850,
+      "previousPrice": 2780,
+      "change": 70,
+      "changePercent": 2.52,
+      "unit": "USD/TEU"
+    },
+    {
+      "route": "Shanghai-Los Angeles",
+      "routeName": "上海-洛杉矶",
+      "currentPrice": 3200,
+      "previousPrice": 3350,
+      "change": -150,
+      "changePercent": -4.48,
+      "unit": "USD/TEU"
+    },
+    {
+      "route": "Shanghai-New York",
+      "routeName": "上海-纽约",
+      "currentPrice": 4200,
+      "previousPrice": 4050,
+      "change": 150,
+      "changePercent": 3.7,
+      "unit": "USD/TEU"
+    },
+    {
+      "route": "Shanghai-Dubai",
+      "routeName": "上海-迪拜",
+      "currentPrice": 1450,
+      "previousPrice": 1420,
+      "change": 30,
+      "changePercent": 2.11,
+      "unit": "USD/TEU"
+    },
+    {
+      "route": "Shanghai-Singapore",
+      "routeName": "上海-新加坡",
+      "currentPrice": 580,
+      "previousPrice": 560,
+      "change": 20,
+      "changePercent": 3.57,
+      "unit": "USD/TEU"
+    },
+    {
+      "route": "Ningbo-Hamburg",
+      "routeName": "宁波-汉堡",
+      "currentPrice": 2750,
+      "previousPrice": 2680,
+      "change": 70,
+      "changePercent": 2.61,
+      "unit": "USD/TEU"
+    },
+    {
+      "route": "Shenzhen-Antwerp",
+      "routeName": "深圳-安特卫普",
+      "currentPrice": 2900,
+      "previousPrice": 2820,
+      "change": 80,
+      "changePercent": 2.84,
+      "unit": "USD/TEU"
+    },
+    {
+      "route": "Hong Kong-Santos",
+      "routeName": "香港-桑托斯",
+      "currentPrice": 1850,
+      "previousPrice": 1920,
+      "change": -70,
+      "changePercent": -3.65,
+      "unit": "USD/TEU"
+    },
+    {
+      "route": "Shenzhen-Djibouti",
+      "routeName": "深圳-吉布提",
+      "currentPrice": 1650,
+      "previousPrice": 1580,
+      "change": 70,
+      "changePercent": 4.43,
+      "unit": "USD/TEU"
+    }
+  ]
+}

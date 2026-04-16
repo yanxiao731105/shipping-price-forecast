@@ -171,4 +171,170 @@ export interface VesselSchedule {
   availableTeu: number;
   price: number;
   status: 'open' | 'filling' | 'full';
+  cutoffTime?: string; // 截关时间
+  containerType?: ContainerCategory; // 箱型类别
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 产品报价体系
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 货品类别
+export type CargoCategory = 'general' | 'dangerous' | 'oversize';
+
+// 箱型类别
+export type ContainerType = '20GP' | '40GP' | '40HQ' | '45HQ' | '20OT' | '40OT' | '20FR' | '40FR';
+
+// 箱型分类
+export type ContainerCategory = 'dry' | 'reefer' | 'special';
+
+// 产品报价
+export interface ProductQuote {
+  id: string;
+  category: CargoCategory;
+  categoryName: string;
+  containerType: ContainerType;
+  containerCategory: ContainerCategory;
+  basePrice: number;        // 基准运价
+  currentPrice: number;      // 当前运价
+  previousPrice: number;      // 上期运价
+  change: number;            // 变化金额
+  changePercent: number;      // 变化百分比
+  unit: string;              // 单位
+  validFrom: string;         // 有效期起
+  validTo: string;           // 有效期止
+  remarks?: string;          // 备注
+}
+
+// 航线产品报价
+export interface RouteProductQuote {
+  route: string;
+  routeName: string;
+  region: RouteRegion;
+  quotes: ProductQuote[];
+}
+
+// 航线区域
+export type RouteRegion = 'southeast_asia' | 'europe' | 'america' | 'middle_east' | 'mediterranean' | 'south_america' | 'origin';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 附加费明细
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 附加费类型
+export type SurchargeType = 'baf' | 'caf' | 'war' | 'pcs' | 'thc' | 'ebs' | 'cic' | 'seal' | 'ams' | 'isf' | 'customs';
+
+// 附加费
+export interface Surcharge {
+  id: string;
+  type: SurchargeType;
+  name: string;
+  nameEn: string;
+  description: string;
+  unit: 'per_teu' | 'per_container' | 'per_bill' | 'percentage';
+  amount: number;             // 金额
+  currency: string;           // 币种
+  effectiveDate: string;      // 生效日期
+  lastUpdate: string;        // 更新日期
+  remarks?: string;           // 备注
+}
+
+// 航线附加费
+export interface RouteSurcharge {
+  route: string;
+  routeName: string;
+  region: RouteRegion;
+  surcharges: Surcharge[];
+  totalSurcharge: number;     // 附加费合计
+  totalPrice: number;         // 含附加费总价
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 多渠道运价对比
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 运价来源
+export type RateSource = 'carrier' | 'forwarder' | 'contract';
+
+// 运价渠道
+export interface RateChannel {
+  id: string;
+  source: RateSource;
+  sourceName: string;
+  sourceNameEn: string;
+  price20gp: number;
+  price40gp: number;
+  price40hq: number;
+  discount: number;            // 较基准折扣
+  validFrom: string;
+  validTo: string;
+  serviceLevel: string;        // 服务等级
+  contact?: string;           // 联系方式
+}
+
+// 运价对比
+export interface RateComparison {
+  route: string;
+  routeName: string;
+  basePrice: number;           // FAK基准价
+  channels: RateChannel[];
+  bestPrice: number;           // 最低价
+  bestChannel: string;         // 最低价来源
+  savings: number;            // 节省金额
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 清关政策
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 关税税率
+export interface TariffRate {
+  hsCode: string;             // HS编码
+  description: string;         // 商品描述
+  dutyRate: number;           // 关税率 %
+  vatRate: number;            // 增值税率 %
+  additionalNotes?: string;   // 补充说明
+}
+
+// 清关政策
+export interface CustomsPolicy {
+  country: string;
+  countryCode: string;
+  region: RouteRegion;
+  port: string;
+  portCode: string;
+  tariffs: TariffRate[];
+  customsClearanceFee: number;  // 清关费用
+  clearanceDays: number;        // 清关天数
+  specialRequirements?: string; // 特殊要求
+  lastUpdate: string;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 价格参考维度
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 价格参考
+export interface PriceReference {
+  route: string;
+  routeName: string;
+  historicalTrend: {
+    currentPrice: number;
+    price1W: number;      // 1周前
+    price1M: number;      // 1月前
+    price3M: number;      // 3月前
+    price6M: number;      // 6月前
+    price1Y: number;      // 1年前
+  };
+  marketReference: {
+    lowestPrice: number; // 市场最低价
+    averagePrice: number; // 市场平均价
+    highestPrice: number; // 市场最高价
+    volume: number;       // 货量
+  };
+  forecast: {
+    nextWeek: number;     // 下周预测
+    nextMonth: number;    // 下月预测
+    confidence: number;  // 预测置信度
+  };
 }
