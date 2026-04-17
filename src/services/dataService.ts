@@ -1,9 +1,10 @@
 /**
- * 数据服务层 — 加载最新数据，区分实时数据和模拟数据
+ * 数据服务层 — 加载最新数据
  * 
  * 数据流：
- * 1. 静态数据: /latest-data.json（构建时生成，包含 SCFI/CCFI/BDI/运价等）
- * 2. 实时数据: /api/market-data（Netlify Function，包含实时汇率/宏观指标）
+ * 静态数据: latest-data.json（public 目录，随构建部署）
+ * 
+ * 部署方式：GitHub Pages，无需后端服务
  */
 
 import type { FreightIndex, FreightRate, MarketOverview } from '@/types';
@@ -26,21 +27,6 @@ export interface IndexData {
   history: { date: string; value: number }[];
   source: string;
   note: string;
-}
-
-export interface RealTimeData {
-  macro: {
-    exchangeRate: {
-      usdCny: string;
-      eurCny: string | null;
-      date: string;
-      live: boolean;
-    };
-  };
-  _meta?: {
-    fromCache: boolean;
-    fetchedAt: string;
-  };
 }
 
 export interface LatestData {
@@ -78,18 +64,16 @@ export interface LatestData {
 }
 
 let cachedData: LatestData | null = null;
-let cachedRealtime: RealTimeData | null = null;
-let realtimeCacheExpiry = 0;
-const REALTIME_CACHE_TTL = 30 * 60 * 1000; // 30 分钟
 
 /**
- * 加载静态数据（构建时生成）
+ * 加载数据（从 latest-data.json）
  */
 export async function loadLatestData(): Promise<LatestData> {
   if (cachedData) return cachedData;
 
   try {
-    const res = await fetch('/latest-data.json?' + new Date().toISOString().slice(0, 10));
+    const base = import.meta.env.BASE_URL || '/';
+    const res = await fetch(`${base}latest-data.json?` + new Date().toISOString().slice(0, 10));
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     cachedData = await res.json();
     return cachedData!;
@@ -100,53 +84,21 @@ export async function loadLatestData(): Promise<LatestData> {
 }
 
 /**
- * 加载实时数据（Netlify Function）
- * 优先从 /.netlify/functions/market-data 获取，降级到 latest-data.json
+ * 兼容旧接口（已无实时数据层）
  */
-export async function loadRealtimeData(): Promise<RealTimeData | null> {
-  const now = Date.now();
-  if (cachedRealtime && now < realtimeCacheExpiry) {
-    return cachedRealtime;
-  }
-
-  try {
-    const res = await fetch('/.netlify/functions/market-data', {
-      headers: { 'Accept': 'application/json' },
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    cachedRealtime = data;
-    realtimeCacheExpiry = now + REALTIME_CACHE_TTL;
-    return data;
-  } catch (e) {
-    console.warn('⚠️ 实时数据加载失败，使用静态数据:', e);
-    return null;
-  }
+export async function loadRealtimeData(): Promise<null> {
+  return null;
 }
 
 /**
- * 获取合并后的完整数据（静态 + 实时）
+ * 获取完整数据
  */
 export async function loadCombinedData(): Promise<{
   static: LatestData;
-  realtime: RealTimeData | null;
+  realtime: null;
 }> {
-  const [staticData, realtimeData] = await Promise.all([
-    loadLatestData(),
-    loadRealtimeData(),
-  ]);
-
-  // 如果有实时汇率，覆盖静态数据
-  if (realtimeData?.macro?.exchangeRate?.live && staticData) {
-    staticData.macro.exchangeRate = {
-      ...staticData.macro.exchangeRate,
-      usdCny: realtimeData.macro.exchangeRate.usdCny,
-      eurCny: realtimeData.macro.exchangeRate.eurCny,
-      source: 'exchangerate-api.com（实时）',
-    };
-  }
-
-  return { static: staticData, realtime: realtimeData };
+  const staticData = await loadLatestData();
+  return { static: staticData, realtime: null };
 }
 
 /**
@@ -191,8 +143,9 @@ function getFallbackData(): LatestData {
         bdi: '内置模拟数据',
         fuel: '内置模拟数据',
         cny: '内置模拟数据',
+        container: '内置模拟数据',
         freightRates: '内置模拟数据',
-        notes: '无法连接数据服务，显示内置数据'
+        notes: '数据加载异常，显示内置数据'
       }
     },
     indices: {
