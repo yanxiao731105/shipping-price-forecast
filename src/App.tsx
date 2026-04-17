@@ -978,12 +978,15 @@ function ForwarderTab() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const routes = [
-    { code: 'all', label: '全部航线' },
-    { code: 'EU', label: '欧洲航线' },
+    { code: 'all',  label: '全部航线' },
+    { code: 'EU',   label: '欧洲航线' },
     { code: 'USWC', label: '美西航线' },
     { code: 'USEC', label: '美东航线' },
-    { code: 'MED', label: '地中海航线' },
-    { code: 'DJI', label: '深圳-吉布提' }
+    { code: 'SEA',  label: '东南亚航线' },
+    { code: 'MED',  label: '地中海航线' },
+    { code: 'MDE',  label: '中东航线' },
+    { code: 'SA',   label: '南美航线' },
+    { code: 'DJI',  label: '深圳-吉布提' }
   ];
 
   const filtered = selectedRoute === 'all'
