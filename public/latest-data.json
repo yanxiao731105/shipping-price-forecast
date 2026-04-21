@@ -1,13 +1,13 @@
 {
   "meta": {
-    "updatedAt": "2026-04-16T14:23:06.894Z",
-    "date": "2026-04-16",
+    "updatedAt": "2026-04-21T00:54:16.710Z",
+    "date": "2026-04-21",
     "version": "2.1",
     "dataSource": {
       "scfi": "上海航运交易所（模拟·无公开API）",
       "ccfi": "交通运输部（模拟·无公开API）",
       "bdi": "波罗的海交易所（模拟）",
-      "fuel": "市场参考价（需定期校准）",
+      "fuel": "Ship & Bunker（2026-04-20）",
       "cny": "exchangerate-api.com",
       "container": "市场参考价（需定期校准）",
       "freightRates": "市场综合参考价（FAK）",
@@ -18,43 +18,47 @@
     "scfi": {
       "name": "上海出口集装箱运价指数",
       "code": "SCFI",
-      "currentValue": 2148,
-      "previousValue": 2098,
-      "change": 50,
-      "changePercent": 2.38,
-      "trend": "up",
+      "currentValue": 1887,
+      "previousValue": 1891,
+      "change": -4,
+      "changePercent": -0.21,
+      "trend": "down",
       "history": [
         {
           "date": "2026-02-20",
-          "value": 2127
+          "value": 2209
         },
         {
           "date": "2026-02-27",
-          "value": 2011
+          "value": 2078
         },
         {
           "date": "2026-03-06",
-          "value": 1938
+          "value": 1944
         },
         {
           "date": "2026-03-13",
-          "value": 1955
+          "value": 1867
         },
         {
           "date": "2026-03-20",
-          "value": 2033
+          "value": 1865
         },
         {
           "date": "2026-03-27",
-          "value": 2190
+          "value": 1933
         },
         {
           "date": "2026-04-03",
-          "value": 2292
+          "value": 2026
         },
         {
           "date": "2026-04-10",
-          "value": 2253
+          "value": 2067
+        },
+        {
+          "date": "2026-04-17",
+          "value": 1979
         }
       ],
       "source": "上海航运交易所（模拟）",
@@ -63,43 +67,47 @@
     "ccfi": {
       "name": "中国出口集装箱运价指数",
       "code": "CCFI",
-      "currentValue": 1456,
-      "previousValue": 1432,
-      "change": 24,
-      "changePercent": 1.68,
-      "trend": "up",
+      "currentValue": 1110,
+      "previousValue": 1113,
+      "change": -3,
+      "changePercent": -0.27,
+      "trend": "down",
       "history": [
         {
           "date": "2026-02-20",
-          "value": 1484
+          "value": 1506
         },
         {
           "date": "2026-02-27",
-          "value": 1389
+          "value": 1413
         },
         {
           "date": "2026-03-06",
-          "value": 1319
+          "value": 1311
         },
         {
           "date": "2026-03-13",
-          "value": 1329
+          "value": 1242
         },
         {
           "date": "2026-03-20",
-          "value": 1412
+          "value": 1203
         },
         {
           "date": "2026-03-27",
-          "value": 1481
+          "value": 1240
         },
         {
           "date": "2026-04-03",
-          "value": 1549
+          "value": 1270
         },
         {
           "date": "2026-04-10",
-          "value": 1550
+          "value": 1250
+        },
+        {
+          "date": "2026-04-17",
+          "value": 1185
         }
       ],
       "source": "交通运输部（模拟）",
@@ -108,115 +116,115 @@
     "bdi": {
       "name": "波罗的海干散货指数",
       "code": "BDI",
-      "currentValue": 2523,
-      "previousValue": 2484,
-      "change": 39,
-      "changePercent": 1.57,
+      "currentValue": 2633,
+      "previousValue": 2567,
+      "change": 66,
+      "changePercent": 2.57,
       "trend": "up",
       "history": [
         {
-          "date": "2026-02-16",
-          "value": 2575
-        },
-        {
-          "date": "2026-02-18",
-          "value": 2604
-        },
-        {
           "date": "2026-02-20",
-          "value": 2604
+          "value": 2536
         },
         {
           "date": "2026-02-23",
-          "value": 2622
+          "value": 2614
         },
         {
           "date": "2026-02-25",
-          "value": 2609
+          "value": 2618
         },
         {
           "date": "2026-02-27",
-          "value": 2601
+          "value": 2639
         },
         {
           "date": "2026-03-02",
-          "value": 2541
+          "value": 2632
         },
         {
           "date": "2026-03-04",
-          "value": 2495
+          "value": 2627
         },
         {
           "date": "2026-03-06",
-          "value": 2506
+          "value": 2564
         },
         {
           "date": "2026-03-09",
-          "value": 2417
+          "value": 2526
         },
         {
           "date": "2026-03-11",
-          "value": 2385
+          "value": 2541
         },
         {
           "date": "2026-03-13",
-          "value": 2365
+          "value": 2507
         },
         {
           "date": "2026-03-16",
-          "value": 2308
+          "value": 2423
         },
         {
           "date": "2026-03-18",
-          "value": 2312
+          "value": 2406
         },
         {
           "date": "2026-03-20",
-          "value": 2291
+          "value": 2381
         },
         {
           "date": "2026-03-23",
-          "value": 2306
+          "value": 2361
         },
         {
           "date": "2026-03-25",
-          "value": 2371
+          "value": 2342
         },
         {
           "date": "2026-03-27",
-          "value": 2372
+          "value": 2384
         },
         {
           "date": "2026-03-30",
-          "value": 2444
+          "value": 2434
         },
         {
           "date": "2026-04-01",
-          "value": 2478
+          "value": 2439
         },
         {
           "date": "2026-04-03",
-          "value": 2511
+          "value": 2484
         },
         {
           "date": "2026-04-06",
-          "value": 2606
+          "value": 2558
         },
         {
           "date": "2026-04-08",
-          "value": 2669
+          "value": 2597
         },
         {
           "date": "2026-04-10",
-          "value": 2687
+          "value": 2686
         },
         {
           "date": "2026-04-13",
-          "value": 2748
+          "value": 2771
         },
         {
           "date": "2026-04-15",
-          "value": 2759
+          "value": 2793
+        },
+        {
+          "date": "2026-04-17",
+          "value": 2829
+        },
+        {
+          "date": "2026-04-20",
+          "value": 2877
         }
       ],
       "source": "波罗的海交易所（模拟）",
@@ -225,17 +233,17 @@
   },
   "macro": {
     "fuelPrice": {
-      "ifo380": 612,
-      "vlsfo": 685,
+      "ifo380": 607,
+      "vlsfo": 716,
       "unit": "USD/MT",
-      "trend": "stable",
-      "weekChange": -3.2,
-      "source": "市场参考价（需定期校准）"
+      "trend": "down",
+      "weekChange": -4.8,
+      "source": "Ship & Bunker（2026-04-20）"
     },
     "exchangeRate": {
       "usdCny": "6.8300",
-      "eurCny": "8.0542",
-      "date": "2026-04-16",
+      "eurCny": "8.0448",
+      "date": "2026-04-21",
       "source": "exchangerate-api.com"
     },
     "containerPrice": {
@@ -247,109 +255,109 @@
     }
   },
   "marketOverview": {
-    "totalIndex": 2148,
-    "totalIndexChange": 2.38,
+    "totalIndex": 1887,
+    "totalIndexChange": -0.21,
     "activeRoutes": 24,
     "bullishSignals": 8,
     "bearishSignals": 5,
-    "overallTrend": "bullish"
+    "overallTrend": "bearish"
   },
   "mainRoutes": [
     {
       "route": "EU",
       "routeName": "欧洲航线",
-      "currentPrice": 2850,
-      "previousPrice": 2780,
-      "change": 70,
-      "changePercent": 2.52,
-      "unit": "USD/TEU",
-      "fak20gp": 1850,
-      "fak40gp": 3200,
-      "fak40hq": 3350
-    },
-    {
-      "route": "USWC",
-      "routeName": "美西航线",
-      "currentPrice": 3200,
-      "previousPrice": 3350,
-      "change": -150,
-      "changePercent": -4.48,
-      "unit": "USD/TEU",
-      "fak20gp": 2200,
-      "fak40gp": 3850,
-      "fak40hq": 4000
-    },
-    {
-      "route": "USEC",
-      "routeName": "美东航线",
-      "currentPrice": 4200,
-      "previousPrice": 4050,
-      "change": 150,
-      "changePercent": 3.7,
-      "unit": "USD/TEU",
-      "fak20gp": 2800,
-      "fak40gp": 4650,
-      "fak40hq": 4850
-    },
-    {
-      "route": "SEA",
-      "routeName": "东南亚航线",
-      "currentPrice": 580,
-      "previousPrice": 560,
-      "change": 20,
-      "changePercent": 3.57,
-      "unit": "USD/TEU",
-      "fak20gp": 380,
-      "fak40gp": 650,
-      "fak40hq": 700
-    },
-    {
-      "route": "MED",
-      "routeName": "地中海航线",
-      "currentPrice": 2650,
-      "previousPrice": 2600,
-      "change": 50,
-      "changePercent": 1.92,
-      "unit": "USD/TEU",
-      "fak20gp": 1750,
-      "fak40gp": 3000,
-      "fak40hq": 3100
-    },
-    {
-      "route": "MDE",
-      "routeName": "中东航线",
-      "currentPrice": 1450,
-      "previousPrice": 1420,
-      "change": 30,
-      "changePercent": 2.11,
-      "unit": "USD/TEU",
-      "fak20gp": 900,
-      "fak40gp": 1600,
-      "fak40hq": 1680
-    },
-    {
-      "route": "SA",
-      "routeName": "南美航线",
-      "currentPrice": 1850,
-      "previousPrice": 1920,
-      "change": -70,
-      "changePercent": -3.65,
+      "currentPrice": 1501,
+      "previousPrice": 1547,
+      "change": -46,
+      "changePercent": -2.97,
       "unit": "USD/TEU",
       "fak20gp": 1200,
       "fak40gp": 2100,
       "fak40hq": 2200
     },
     {
+      "route": "USWC",
+      "routeName": "美西航线",
+      "currentPrice": 2612,
+      "previousPrice": 2552,
+      "change": 60,
+      "changePercent": 2.35,
+      "unit": "USD/FEU",
+      "fak20gp": 1800,
+      "fak40gp": 3100,
+      "fak40hq": 3250
+    },
+    {
+      "route": "USEC",
+      "routeName": "美东航线",
+      "currentPrice": 3584,
+      "previousPrice": 3518,
+      "change": 66,
+      "changePercent": 1.88,
+      "unit": "USD/FEU",
+      "fak20gp": 2400,
+      "fak40gp": 4200,
+      "fak40hq": 4400
+    },
+    {
+      "route": "SEA",
+      "routeName": "东南亚航线",
+      "currentPrice": 541,
+      "previousPrice": 515,
+      "change": 26,
+      "changePercent": 4.92,
+      "unit": "USD/TEU",
+      "fak20gp": 360,
+      "fak40gp": 620,
+      "fak40hq": 660
+    },
+    {
+      "route": "MED",
+      "routeName": "地中海航线",
+      "currentPrice": 2491,
+      "previousPrice": 2590,
+      "change": -99,
+      "changePercent": -3.82,
+      "unit": "USD/TEU",
+      "fak20gp": 1650,
+      "fak40gp": 2850,
+      "fak40hq": 2950
+    },
+    {
+      "route": "MDE",
+      "routeName": "中东航线",
+      "currentPrice": 4031,
+      "previousPrice": 4167,
+      "change": -136,
+      "changePercent": -3.26,
+      "unit": "USD/TEU",
+      "fak20gp": 2800,
+      "fak40gp": 4800,
+      "fak40hq": 4950
+    },
+    {
+      "route": "SA",
+      "routeName": "南美航线",
+      "currentPrice": 2419,
+      "previousPrice": 2501,
+      "change": -82,
+      "changePercent": -3.3,
+      "unit": "USD/TEU",
+      "fak20gp": 1600,
+      "fak40gp": 2750,
+      "fak40hq": 2850
+    },
+    {
       "route": "DJI",
       "routeName": "深圳-吉布提",
-      "currentPrice": 1650,
-      "previousPrice": 1580,
+      "currentPrice": 1750,
+      "previousPrice": 1680,
       "change": 70,
-      "changePercent": 4.43,
+      "changePercent": 4.17,
       "unit": "USD/TEU",
-      "fak20gp": 1050,
-      "fak40gp": 1850,
-      "fak40hq": 1920
+      "fak20gp": 1150,
+      "fak40gp": 2000,
+      "fak40hq": 2080
     }
   ]
 }

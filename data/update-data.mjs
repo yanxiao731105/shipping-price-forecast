@@ -81,9 +81,9 @@ async function main() {
 
   // ── 2. BDI 波罗的海干散货指数 ──
   console.log('📊 获取 BDI 指数...');
-  let bdiValue = 2523;    // 2026-04-16 最新值（智通财经）
-  let bdiChange = 39;     // +1.57%
-  let bdiChangePercent = 1.57;
+  let bdiValue = 2633;    // 2026-04-20 最新值（格隆汇）
+  let bdiChange = 66;     // +2.57%
+  let bdiChangePercent = 2.57;
   let bdiSource = '波罗的海交易所（模拟）';
 
   // 尝试从 Yahoo Finance 获取 BDI
@@ -106,21 +106,23 @@ async function main() {
   // 注：IFO380/VLSFO 无稳定免费 API，使用合理市场参考值
   // 实际生产环境建议接入 BunkerEx / Ship & Bunker 等付费 API
   const fuelPrice = {
-    ifo380: 612,    // IFO 380 USD/MT（2026年4月参考价）
-    vlsfo: 685,     // VLSFO 0.5% USD/MT
+    ifo380: 607,    // IFO 380 USD/MT（2026年4月20日，全球4港均值）
+    vlsfo: 716,     // VLSFO 0.5% USD/MT（2026年4月20日，全球4港均值）
     unit: 'USD/MT',
-    trend: 'stable',
-    weekChange: -3.2,
-    source: '市场参考价（需定期校准）'
+    trend: 'down',
+    weekChange: -4.8,
+    source: 'Ship & Bunker（2026-04-20）'
   };
   console.log(`   ℹ️ IFO380: $${fuelPrice.ifo380}, VLSFO: $${fuelPrice.vlsfo} (${fuelPrice.source})`);
 
-  // ── 4. SCFI / CCFI（模拟，无公开 API） ──
-  console.log('📊 SCFI / CCFI 指数（模拟）...');
-  const scfiValue = 2148;
-  const scfiPrev = 2098;
-  const ccfiValue = 1456;
-  const ccfiPrev = 1432;
+  // ── 4. SCFI / CCFI ──
+  // SCFI 2026-04-17 最新值：1886.54点，较上期(1890.77)跌4.23点(-0.22%)
+  // CCFI 估算值 ~1110（参考tradingeconomics数据）
+  console.log('📊 SCFI / CCFI 指数...');
+  const scfiValue = 1887;
+  const scfiPrev = 1891;
+  const ccfiValue = 1110;
+  const ccfiPrev = 1113;
 
   // ── 5. 集装箱价格参考 ──
   const containerPrice = {
@@ -212,14 +214,14 @@ async function main() {
       overallTrend: scfiValue >= scfiPrev ? 'bullish' : 'bearish'
     },
     mainRoutes: [
-      { route: 'EU', routeName: '欧洲航线', currentPrice: 2850, previousPrice: 2780, change: 70, changePercent: 2.52, unit: 'USD/TEU', fak20gp: 1850, fak40gp: 3200, fak40hq: 3350 },
-      { route: 'USWC', routeName: '美西航线', currentPrice: 3200, previousPrice: 3350, change: -150, changePercent: -4.48, unit: 'USD/TEU', fak20gp: 2200, fak40gp: 3850, fak40hq: 4000 },
-      { route: 'USEC', routeName: '美东航线', currentPrice: 4200, previousPrice: 4050, change: 150, changePercent: 3.70, unit: 'USD/TEU', fak20gp: 2800, fak40gp: 4650, fak40hq: 4850 },
-      { route: 'SEA', routeName: '东南亚航线', currentPrice: 580, previousPrice: 560, change: 20, changePercent: 3.57, unit: 'USD/TEU', fak20gp: 380, fak40gp: 650, fak40hq: 700 },
-      { route: 'MED', routeName: '地中海航线', currentPrice: 2650, previousPrice: 2600, change: 50, changePercent: 1.92, unit: 'USD/TEU', fak20gp: 1750, fak40gp: 3000, fak40hq: 3100 },
-      { route: 'MDE', routeName: '中东航线', currentPrice: 1450, previousPrice: 1420, change: 30, changePercent: 2.11, unit: 'USD/TEU', fak20gp: 900, fak40gp: 1600, fak40hq: 1680 },
-      { route: 'SA', routeName: '南美航线', currentPrice: 1850, previousPrice: 1920, change: -70, changePercent: -3.65, unit: 'USD/TEU', fak20gp: 1200, fak40gp: 2100, fak40hq: 2200 },
-      { route: 'DJI', routeName: '深圳-吉布提', currentPrice: 1650, previousPrice: 1580, change: 70, changePercent: 4.43, unit: 'USD/TEU', fak20gp: 1050, fak40gp: 1850, fak40hq: 1920 }
+      { route: 'EU', routeName: '欧洲航线', currentPrice: 1501, previousPrice: 1547, change: -46, changePercent: -2.97, unit: 'USD/TEU', fak20gp: 1200, fak40gp: 2100, fak40hq: 2200 },
+      { route: 'USWC', routeName: '美西航线', currentPrice: 2612, previousPrice: 2552, change: 60, changePercent: 2.35, unit: 'USD/FEU', fak20gp: 1800, fak40gp: 3100, fak40hq: 3250 },
+      { route: 'USEC', routeName: '美东航线', currentPrice: 3584, previousPrice: 3518, change: 66, changePercent: 1.88, unit: 'USD/FEU', fak20gp: 2400, fak40gp: 4200, fak40hq: 4400 },
+      { route: 'SEA', routeName: '东南亚航线', currentPrice: 541, previousPrice: 515, change: 26, changePercent: 4.92, unit: 'USD/TEU', fak20gp: 360, fak40gp: 620, fak40hq: 660 },
+      { route: 'MED', routeName: '地中海航线', currentPrice: 2491, previousPrice: 2590, change: -99, changePercent: -3.82, unit: 'USD/TEU', fak20gp: 1650, fak40gp: 2850, fak40hq: 2950 },
+      { route: 'MDE', routeName: '中东航线', currentPrice: 4031, previousPrice: 4167, change: -136, changePercent: -3.26, unit: 'USD/TEU', fak20gp: 2800, fak40gp: 4800, fak40hq: 4950 },
+      { route: 'SA', routeName: '南美航线', currentPrice: 2419, previousPrice: 2501, change: -82, changePercent: -3.30, unit: 'USD/TEU', fak20gp: 1600, fak40gp: 2750, fak40hq: 2850 },
+      { route: 'DJI', routeName: '深圳-吉布提', currentPrice: 1750, previousPrice: 1680, change: 70, changePercent: 4.17, unit: 'USD/TEU', fak20gp: 1150, fak40gp: 2000, fak40hq: 2080 }
     ]
   };
 

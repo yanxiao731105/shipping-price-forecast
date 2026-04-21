@@ -23,11 +23,11 @@ import type {
 // SCFI 指数历史数据（模拟）
 export const generateSCFIHistory = () => {
   const history = [];
-  const baseValue = 2100;
+  const baseValue = 1887;
   for (let i = 30; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
-    const value = baseValue + Math.sin(i / 5) * 150 + Math.random() * 100;
+    const value = baseValue + Math.sin(i / 5) * 80 + Math.random() * 60;
     history.push({
       date: date.toISOString().split('T')[0],
       value: Math.round(value)
@@ -39,11 +39,11 @@ export const generateSCFIHistory = () => {
 // CCFI 指数历史数据（模拟）
 export const generateCCFIHistory = () => {
   const history = [];
-  const baseValue = 1450;
+  const baseValue = 1110;
   for (let i = 30; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
-    const value = baseValue + Math.cos(i / 7) * 100 + Math.random() * 80;
+    const value = baseValue + Math.cos(i / 7) * 50 + Math.random() * 40;
     history.push({
       date: date.toISOString().split('T')[0],
       value: Math.round(value)
@@ -54,12 +54,12 @@ export const generateCCFIHistory = () => {
 
 // 市场概览
 export const marketOverview: MarketOverview = {
-  totalIndex: 2147.86,
-  totalIndexChange: 2.34,
+  totalIndex: 1886.54,
+  totalIndexChange: -0.22,
   activeRoutes: 24,
-  bullishSignals: 8,
-  bearishSignals: 5,
-  overallTrend: 'bullish'
+  bullishSignals: 5,
+  bearishSignals: 6,
+  overallTrend: 'bearish'
 };
 
 // 运价指数
@@ -67,211 +67,200 @@ export const freightIndices: FreightIndex[] = [
   {
     name: '上海出口集装箱运价指数',
     code: 'SCFI',
-    currentValue: 2147.86,
-    previousValue: 2098.45,
-    change: 49.41,
-    changePercent: 2.35,
-    trend: 'up',
+    currentValue: 1886.54,
+    previousValue: 1890.77,
+    change: -4.23,
+    changePercent: -0.22,
+    trend: 'down',
     history: generateSCFIHistory()
   },
   {
     name: '中国出口集装箱运价指数',
     code: 'CCFI',
-    currentValue: 1456.32,
-    previousValue: 1432.18,
-    change: 24.14,
-    changePercent: 1.69,
-    trend: 'up',
+    currentValue: 1110,
+    previousValue: 1113,
+    change: -3,
+    changePercent: -0.27,
+    trend: 'down',
     history: generateCCFIHistory()
   },
   {
     name: '欧洲航线综合运价',
     code: 'EU',
-    currentValue: 2850,
-    previousValue: 2780,
-    change: 70,
-    changePercent: 2.52,
-    trend: 'up',
-    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 1.3 }))
+    currentValue: 1501,
+    previousValue: 1547,
+    change: -46,
+    changePercent: -2.97,
+    trend: 'down',
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.79 }))
   },
   {
     name: '美西航线综合运价',
     code: 'USWC',
-    currentValue: 3200,
-    previousValue: 3350,
-    change: -150,
-    changePercent: -4.48,
-    trend: 'down',
-    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 1.5 }))
+    currentValue: 2612,
+    previousValue: 2552,
+    change: 60,
+    changePercent: 2.35,
+    trend: 'up',
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 1.38 }))
   },
   {
     name: '美东航线综合运价',
     code: 'USEC',
-    currentValue: 4200,
-    previousValue: 4050,
-    change: 150,
-    changePercent: 3.70,
+    currentValue: 3584,
+    previousValue: 3518,
+    change: 66,
+    changePercent: 1.88,
     trend: 'up',
-    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 1.9 }))
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 1.90 }))
   },
   {
     name: '地中海航线运价',
     code: 'MED',
-    currentValue: 2650,
-    previousValue: 2600,
-    change: 50,
-    changePercent: 1.92,
-    trend: 'up',
-    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 1.2 }))
+    currentValue: 2491,
+    previousValue: 2590,
+    change: -99,
+    changePercent: -3.82,
+    trend: 'down',
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 1.32 }))
   },
   {
     name: '东南亚航线运价',
     code: 'SEA',
-    currentValue: 580,
-    previousValue: 560,
-    change: 20,
-    changePercent: 3.57,
+    currentValue: 541,
+    previousValue: 515,
+    change: 26,
+    changePercent: 4.92,
     trend: 'up',
-    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.27 }))
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.29 }))
   },
   {
     name: '中东航线运价',
     code: 'MDE',
-    currentValue: 1450,
-    previousValue: 1420,
-    change: 30,
-    changePercent: 2.11,
-    trend: 'up',
-    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.67 }))
+    currentValue: 4031,
+    previousValue: 4167,
+    change: -136,
+    changePercent: -3.26,
+    trend: 'down',
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 2.14 }))
   },
   {
     name: '南美航线运价',
     code: 'SA',
-    currentValue: 1850,
-    previousValue: 1920,
-    change: -70,
-    changePercent: -3.65,
+    currentValue: 2419,
+    previousValue: 2501,
+    change: -82,
+    changePercent: -3.30,
     trend: 'down',
-    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.85 }))
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 1.28 }))
   },
   {
     name: '深圳-吉布提航线运价',
     code: 'DJI',
-    currentValue: 1650,
-    previousValue: 1580,
+    currentValue: 1750,
+    previousValue: 1680,
     change: 70,
-    changePercent: 4.43,
+    changePercent: 4.17,
     trend: 'up',
-    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.76 }))
+    history: generateSCFIHistory().map(h => ({ ...h, value: h.value * 0.93 }))
   }
 ];
 
 // 主要航线运价（统一 8 条标准航线，所有模块共用此格式）
+// 数据更新至 2026-04-17（SCFI最新期）
 export const mainRoutes: FreightRate[] = [
   {
     route: 'EU', routeName: '欧洲航线',
-    currentPrice: 2850, previousPrice: 2780, change: 70, changePercent: 2.52,
-    unit: 'USD/TEU', lastUpdate: '2026-04-15'
+    currentPrice: 1501, previousPrice: 1547, change: -46, changePercent: -2.97,
+    unit: 'USD/TEU', lastUpdate: '2026-04-17'
   },
   {
     route: 'USWC', routeName: '美西航线',
-    currentPrice: 3200, previousPrice: 3350, change: -150, changePercent: -4.48,
-    unit: 'USD/TEU', lastUpdate: '2026-04-15'
+    currentPrice: 2612, previousPrice: 2552, change: 60, changePercent: 2.35,
+    unit: 'USD/FEU', lastUpdate: '2026-04-17'
   },
   {
     route: 'USEC', routeName: '美东航线',
-    currentPrice: 4200, previousPrice: 4050, change: 150, changePercent: 3.70,
-    unit: 'USD/TEU', lastUpdate: '2026-04-15'
+    currentPrice: 3584, previousPrice: 3518, change: 66, changePercent: 1.88,
+    unit: 'USD/FEU', lastUpdate: '2026-04-17'
   },
   {
     route: 'SEA', routeName: '东南亚航线',
-    currentPrice: 580, previousPrice: 560, change: 20, changePercent: 3.57,
-    unit: 'USD/TEU', lastUpdate: '2026-04-15'
+    currentPrice: 541, previousPrice: 515, change: 26, changePercent: 4.92,
+    unit: 'USD/TEU', lastUpdate: '2026-04-17'
   },
   {
     route: 'MED', routeName: '地中海航线',
-    currentPrice: 2650, previousPrice: 2600, change: 50, changePercent: 1.92,
-    unit: 'USD/TEU', lastUpdate: '2026-04-15'
+    currentPrice: 2491, previousPrice: 2590, change: -99, changePercent: -3.82,
+    unit: 'USD/TEU', lastUpdate: '2026-04-17'
   },
   {
     route: 'MDE', routeName: '中东航线',
-    currentPrice: 1450, previousPrice: 1420, change: 30, changePercent: 2.11,
-    unit: 'USD/TEU', lastUpdate: '2026-04-15'
+    currentPrice: 4031, previousPrice: 4167, change: -136, changePercent: -3.26,
+    unit: 'USD/TEU', lastUpdate: '2026-04-17'
   },
   {
     route: 'SA', routeName: '南美航线',
-    currentPrice: 1850, previousPrice: 1920, change: -70, changePercent: -3.65,
-    unit: 'USD/TEU', lastUpdate: '2026-04-15'
+    currentPrice: 2419, previousPrice: 2501, change: -82, changePercent: -3.30,
+    unit: 'USD/TEU', lastUpdate: '2026-04-17'
   },
   {
     route: 'DJI', routeName: '深圳-吉布提',
-    currentPrice: 1650, previousPrice: 1580, change: 70, changePercent: 4.43,
-    unit: 'USD/TEU', lastUpdate: '2026-04-15'
+    currentPrice: 1750, previousPrice: 1680, change: 70, changePercent: 4.17,
+    unit: 'USD/TEU', lastUpdate: '2026-04-17'
   }
 ];
 
 // 供需平衡指标
 export const supplyDemandMetrics: SupplyDemandMetrics = {
-  utilizationRate: 92.5,
-  utilizationChange: 3.2,
-  blankSailingRate: 4.8,
-  blankSailingChange: -1.2,
-  orderbookVolume: 4.2,
-  newbuildingDeliveries: 1.8,
-  scrapRate: 0.6
+  utilizationRate: 88.3,
+  utilizationChange: -2.1,
+  blankSailingRate: 5.5,
+  blankSailingChange: 0.8,
+  orderbookVolume: 4.5,
+  newbuildingDeliveries: 2.1,
+  scrapRate: 0.4
 };
 
-// 地缘政治因素
+// 地缘政治因素（更新至 2026-04-17）
 export const geopoliticalFactors: GeopoliticalFactor[] = [
   {
     id: 'red-sea-1',
     name: '红海危机',
     impact: 'negative',
-    severity: 'high',
-    description: '胡塞武装持续袭击商船，迫使船公司绕行好望角，大幅增加运输时间和成本',
-    affectedRoutes: ['EU', 'MDE'],
+    severity: 'medium',
+    description: '中东冲突局势反复，美伊谈判预期升温，市场观望情绪浓厚，红海通行风险依然存在',
+    affectedRoutes: ['EU', 'MED', 'MDE'],
     startDate: '2023-12-01',
     currentStatus: 'active'
   },
   {
-    id: 'port-strike-1',
-    name: '欧洲港口罢工',
-    impact: 'negative',
+    id: 'mid-east-talks',
+    name: '美伊核谈判',
+    impact: 'positive',
     severity: 'medium',
-    description: '德国港口工人罢工导致作业效率下降，预计影响汉堡、不来梅等港口',
-    affectedRoutes: ['EU'],
-    startDate: '2026-04-10',
-    endDate: '2026-04-20',
+    description: '美伊新一轮谈判预期升温，中东航线运价出现2月以来首次转跌，市场情绪转向谨慎乐观',
+    affectedRoutes: ['MDE'],
+    startDate: '2026-04-01',
     currentStatus: 'active'
   },
   {
-    id: 'us-labor-1',
-    name: '美国西海岸劳资谈判',
-    impact: 'neutral',
-    severity: 'medium',
-    description: 'ILWU与 PMA 谈判进展缓慢，市场观望情绪浓厚',
-    affectedRoutes: ['USWC'],
-    startDate: '2026-03-15',
-    currentStatus: 'active'
-  },
-  {
-    id: 'typhoon-1',
-    name: '台风影响',
-    impact: 'negative',
-    severity: 'low',
-    description: '菲律宾以东热带低压可能影响东亚航线船期',
-    affectedRoutes: ['SEA', 'MDE'],
-    startDate: '2026-04-14',
-    endDate: '2026-04-17',
-    currentStatus: 'active'
-  },
-  {
-    id: 'suez-status',
-    name: '苏伊士运河通行状况',
+    id: 'us-capacity-control',
+    name: '美线控舱策略',
     impact: 'positive',
     severity: 'high',
-    description: '苏伊士运河管理局加快通航效率，部分缓解红海绕行压力',
-    affectedRoutes: ['EU'],
+    description: '船公司持续执行控舱+减班策略，美西/美东运价连续走强，支撑运价高位运行',
+    affectedRoutes: ['USWC', 'USEC'],
+    startDate: '2026-01-01',
+    currentStatus: 'active'
+  },
+  {
+    id: 'overcapacity',
+    name: '运力过剩压力',
+    impact: 'negative',
+    severity: 'high',
+    description: '新船集中交付，5-6月周均已确定舱位规模26万TEU，运力过剩压制欧线/地中海运价',
+    affectedRoutes: ['EU', 'MED'],
     startDate: '2026-01-01',
     currentStatus: 'active'
   },
@@ -280,62 +269,73 @@ export const geopoliticalFactors: GeopoliticalFactor[] = [
     name: '埃塞俄比亚物流走廊',
     impact: 'positive',
     severity: 'medium',
-    description: '埃塞俄比亚经吉布提港的进出口货物量持续增长，支撑航线运价稳定',
+    description: '埃塞俄比亚经吉布提港的进出口货物量持续增长，支撑航线运价稳定上行',
     affectedRoutes: ['DJI'],
     startDate: '2026-01-01',
+    currentStatus: 'active'
+  },
+  {
+    id: 'bdi-rally',
+    name: 'BDI指数大涨',
+    impact: 'positive',
+    severity: 'medium',
+    description: 'BDI连续12个交易日上涨，创四个月新高，海岬型船运价大幅反弹，干散货市场回暖',
+    affectedRoutes: ['DJI'],
+    startDate: '2026-04-01',
     currentStatus: 'active'
   }
 ];
 
 // 航线预测数据（统一 8 条标准航线）
+// 数据更新至 2026-04-17（SCFI最新期）
 export const routeForecastData: RouteData[] = [
   {
     id: 'eu-route', name: '欧洲航线', code: 'EU', region: 'Europe',
-    currentRate: 2850, forecast: generateForecast(2850, 'up', 4),
-    fakRate: { price20gp: 2400, price40gp: 4200, price40hq: 4300, lastUpdate: '2026-04-15' },
-    contractRate: { quarterly: 2600, annual: 2400, premium: 8.3 }
+    currentRate: 1501, forecast: generateForecast(1501, 'down', 4),
+    fakRate: { price20gp: 1200, price40gp: 2100, price40hq: 2200, lastUpdate: '2026-04-17' },
+    contractRate: { quarterly: 1380, annual: 1250, premium: 8.8 }
   },
   {
     id: 'uswc-route', name: '美西航线', code: 'USWC', region: 'North America',
-    currentRate: 3200, forecast: generateForecast(3200, 'down', 4),
-    fakRate: { price20gp: 2800, price40gp: 4800, price40hq: 4900, lastUpdate: '2026-04-15' },
-    contractRate: { quarterly: 3000, annual: 2800, premium: 12.5 }
+    currentRate: 2612, forecast: generateForecast(2612, 'up', 4),
+    fakRate: { price20gp: 1800, price40gp: 3100, price40hq: 3250, lastUpdate: '2026-04-17' },
+    contractRate: { quarterly: 2450, annual: 2300, premium: 12.5 }
   },
   {
     id: 'usec-route', name: '美东航线', code: 'USEC', region: 'North America',
-    currentRate: 4200, forecast: generateForecast(4200, 'up', 4),
-    fakRate: { price20gp: 3600, price40gp: 6400, price40hq: 6600, lastUpdate: '2026-04-15' },
-    contractRate: { quarterly: 3900, annual: 3600, premium: 14.3 }
+    currentRate: 3584, forecast: generateForecast(3584, 'up', 4),
+    fakRate: { price20gp: 2400, price40gp: 4200, price40hq: 4400, lastUpdate: '2026-04-17' },
+    contractRate: { quarterly: 3350, annual: 3100, premium: 14.3 }
   },
   {
     id: 'sea-route', name: '东南亚航线', code: 'SEA', region: 'Southeast Asia',
-    currentRate: 580, forecast: generateForecast(580, 'up', 4),
-    fakRate: { price20gp: 480, price40gp: 850, price40hq: 880, lastUpdate: '2026-04-15' },
-    contractRate: { quarterly: 520, annual: 490, premium: 11.7 }
+    currentRate: 541, forecast: generateForecast(541, 'up', 4),
+    fakRate: { price20gp: 360, price40gp: 620, price40hq: 660, lastUpdate: '2026-04-17' },
+    contractRate: { quarterly: 490, annual: 460, premium: 11.7 }
   },
   {
     id: 'med-route', name: '地中海航线', code: 'MED', region: 'Mediterranean',
-    currentRate: 2650, forecast: generateForecast(2650, 'stable', 4),
-    fakRate: { price20gp: 2200, price40gp: 3800, price40hq: 3900, lastUpdate: '2026-04-15' },
-    contractRate: { quarterly: 2500, annual: 2300, premium: 13.2 }
+    currentRate: 2491, forecast: generateForecast(2491, 'down', 4),
+    fakRate: { price20gp: 1650, price40gp: 2850, price40hq: 2950, lastUpdate: '2026-04-17' },
+    contractRate: { quarterly: 2350, annual: 2200, premium: 13.2 }
   },
   {
     id: 'mde-route', name: '中东航线', code: 'MDE', region: 'Middle East',
-    currentRate: 1450, forecast: generateForecast(1450, 'stable', 4),
-    fakRate: { price20gp: 1200, price40gp: 2100, price40hq: 2180, lastUpdate: '2026-04-15' },
-    contractRate: { quarterly: 1350, annual: 1280, premium: 13.2 }
+    currentRate: 4031, forecast: generateForecast(4031, 'down', 4),
+    fakRate: { price20gp: 2800, price40gp: 4800, price40hq: 4950, lastUpdate: '2026-04-17' },
+    contractRate: { quarterly: 3800, annual: 3500, premium: 7.2 }
   },
   {
     id: 'sa-route', name: '南美航线', code: 'SA', region: 'South America',
-    currentRate: 1850, forecast: generateForecast(1850, 'down', 4),
-    fakRate: { price20gp: 1600, price40gp: 2750, price40hq: 2850, lastUpdate: '2026-04-15' },
-    contractRate: { quarterly: 1750, annual: 1680, premium: 10.1 }
+    currentRate: 2419, forecast: generateForecast(2419, 'down', 4),
+    fakRate: { price20gp: 1600, price40gp: 2750, price40hq: 2850, lastUpdate: '2026-04-17' },
+    contractRate: { quarterly: 2280, annual: 2150, premium: 10.1 }
   },
   {
     id: 'djibouti-route', name: '深圳-吉布提', code: 'DJI', region: 'Africa',
-    currentRate: 1650, forecast: generateForecast(1650, 'up', 4),
-    fakRate: { price20gp: 1400, price40gp: 2400, price40hq: 2500, lastUpdate: '2026-04-15' },
-    contractRate: { quarterly: 1550, annual: 1450, premium: 12.1 }
+    currentRate: 1750, forecast: generateForecast(1750, 'up', 4),
+    fakRate: { price20gp: 1150, price40gp: 2000, price40hq: 2080, lastUpdate: '2026-04-17' },
+    contractRate: { quarterly: 1650, annual: 1520, premium: 12.1 }
   }
 ];
 
@@ -384,54 +384,55 @@ function getForecastFactors(trend: 'up' | 'down' | 'stable'): string[] {
 }
 
 // 订舱建议（统一 8 条标准航线）
+// 数据更新至 2026-04-17
 export const bookingRecommendations: BookingRecommendation[] = [
   {
     route: 'EU',
-    action: 'book_now', confidence: 82,
-    reason: '红海危机持续推高运价，预计2周内仍有5-8%上涨空间，建议尽快锁定舱位',
-    optimalTiming: '本周内', priceRange: { min: 2850, max: 3100, expected: 2950 }, riskLevel: 'medium'
+    action: 'wait', confidence: 78,
+    reason: '欧线运价连续回调，运力过剩+需求放缓，短期仍有下跌空间，建议观望等待更低点',
+    optimalTiming: '5月中旬', priceRange: { min: 1400, max: 1550, expected: 1460 }, riskLevel: 'low'
   },
   {
     route: 'USWC',
-    action: 'wait', confidence: 75,
-    reason: '美西航线运价回调，短期趋势向下，建议观望2周等待更好的订舱窗口',
-    optimalTiming: '4月底', priceRange: { min: 2900, max: 3200, expected: 3050 }, riskLevel: 'low'
+    action: 'book_now', confidence: 75,
+    reason: '美西运价持续走强，船公司控舱+减班策略支撑运价，但上周未满载需注意需求端',
+    optimalTiming: '本周内', priceRange: { min: 2550, max: 2750, expected: 2650 }, riskLevel: 'medium'
   },
   {
     route: 'USEC',
-    action: 'book_now', confidence: 78,
-    reason: '美东需求旺盛，舱位紧张，预计运价将继续上涨10%左右',
-    optimalTiming: '本周内', priceRange: { min: 4200, max: 4600, expected: 4350 }, riskLevel: 'medium'
+    action: 'book_now', confidence: 72,
+    reason: '美东运价稳步上涨，供需关系偏紧，建议尽早锁定舱位',
+    optimalTiming: '本周内', priceRange: { min: 3500, max: 3750, expected: 3600 }, riskLevel: 'medium'
   },
   {
     route: 'SEA',
-    action: 'wait', confidence: 70,
-    reason: '东南亚航线运价稳定，短期波动小，可按需订舱',
-    optimalTiming: '按需', priceRange: { min: 550, max: 620, expected: 590 }, riskLevel: 'low'
+    action: 'wait', confidence: 68,
+    reason: '东南亚航线运价上涨但绝对值低，可按需订舱，不必急于锁定',
+    optimalTiming: '按需', priceRange: { min: 510, max: 580, expected: 545 }, riskLevel: 'low'
   },
   {
     route: 'MED',
-    action: 'hedge', confidence: 70,
-    reason: '欧洲港口罢工影响不确定性较大，建议分批订舱对冲风险',
-    optimalTiming: '分批执行', priceRange: { min: 2600, max: 2800, expected: 2700 }, riskLevel: 'high'
+    action: 'wait', confidence: 74,
+    reason: '地中海运价大幅回调，短期趋势向下，建议观望',
+    optimalTiming: '5月中旬', priceRange: { min: 2350, max: 2550, expected: 2430 }, riskLevel: 'low'
   },
   {
     route: 'MDE',
-    action: 'wait', confidence: 68,
-    reason: '中东航线运价平稳，斋月后可能有小幅回调',
-    optimalTiming: '5月初', priceRange: { min: 1380, max: 1500, expected: 1430 }, riskLevel: 'low'
+    action: 'hedge', confidence: 70,
+    reason: '中东航线首次转跌，地缘冲突不确定性大，建议分批订舱对冲风险',
+    optimalTiming: '分批执行', priceRange: { min: 3800, max: 4150, expected: 3950 }, riskLevel: 'high'
   },
   {
     route: 'SA',
-    action: 'hedge', confidence: 65,
-    reason: '南美航线汇率波动风险大，建议分批锁定',
-    optimalTiming: '分批执行', priceRange: { min: 1750, max: 1900, expected: 1820 }, riskLevel: 'high'
+    action: 'wait', confidence: 72,
+    reason: '南美航线运价回调中，汇率波动风险大，建议等待企稳',
+    optimalTiming: '5月初', priceRange: { min: 2300, max: 2500, expected: 2380 }, riskLevel: 'medium'
   },
   {
     route: 'DJI',
     action: 'book_now', confidence: 80,
-    reason: '埃塞俄比亚进口需求旺盛，吉布提港中转货物量增长，预计运价将继续上涨5-7%',
-    optimalTiming: '本周内', priceRange: { min: 1650, max: 1780, expected: 1720 }, riskLevel: 'low'
+    reason: '吉布提航线需求旺盛，埃塞进口持续增长，运价仍有上行空间',
+    optimalTiming: '本周内', priceRange: { min: 1700, max: 1850, expected: 1780 }, riskLevel: 'low'
   }
 ];
 
@@ -1327,51 +1328,51 @@ export const customsPolicies: CustomsPolicy[] = [
 export const priceReferences: PriceReference[] = [
   {
     route: 'EU', routeName: '欧洲航线',
-    historicalTrend: { currentPrice: 2850, price1W: 2780, price1M: 2650, price3M: 2480, price6M: 2180, price1Y: 1920 },
-    marketReference: { lowestPrice: 2650, averagePrice: 2850, highestPrice: 3100, volume: 158000 },
-    forecast: { nextWeek: 2900, nextMonth: 3050, confidence: 78 }
+    historicalTrend: { currentPrice: 1501, price1W: 1547, price1M: 1826, price3M: 2200, price6M: 2500, price1Y: 1850 },
+    marketReference: { lowestPrice: 1400, averagePrice: 1520, highestPrice: 1700, volume: 148000 },
+    forecast: { nextWeek: 1470, nextMonth: 1400, confidence: 74 }
   },
   {
     route: 'USWC', routeName: '美西航线',
-    historicalTrend: { currentPrice: 3200, price1W: 3350, price1M: 3480, price3M: 3200, price6M: 2850, price1Y: 2450 },
-    marketReference: { lowestPrice: 2900, averagePrice: 3150, highestPrice: 3500, volume: 185000 },
-    forecast: { nextWeek: 3150, nextMonth: 3050, confidence: 72 }
+    historicalTrend: { currentPrice: 2612, price1W: 2552, price1M: 2200, price3M: 2000, price6M: 2300, price1Y: 2000 },
+    marketReference: { lowestPrice: 2450, averagePrice: 2600, highestPrice: 2850, volume: 175000 },
+    forecast: { nextWeek: 2680, nextMonth: 2750, confidence: 72 }
   },
   {
     route: 'USEC', routeName: '美东航线',
-    historicalTrend: { currentPrice: 4200, price1W: 4050, price1M: 3850, price3M: 3600, price6M: 3200, price1Y: 2800 },
-    marketReference: { lowestPrice: 3900, averagePrice: 4150, highestPrice: 4500, volume: 98000 },
-    forecast: { nextWeek: 4300, nextMonth: 4450, confidence: 75 }
+    historicalTrend: { currentPrice: 3584, price1W: 3518, price1M: 3100, price3M: 2900, price6M: 3000, price1Y: 2650 },
+    marketReference: { lowestPrice: 3400, averagePrice: 3550, highestPrice: 3800, volume: 92000 },
+    forecast: { nextWeek: 3650, nextMonth: 3720, confidence: 70 }
   },
   {
     route: 'DJI', routeName: '深圳-吉布提',
-    historicalTrend: { currentPrice: 1650, price1W: 1580, price1M: 1520, price3M: 1480, price6M: 1350, price1Y: 1180 },
-    marketReference: { lowestPrice: 1500, averagePrice: 1620, highestPrice: 1750, volume: 42000 },
-    forecast: { nextWeek: 1700, nextMonth: 1780, confidence: 80 }
+    historicalTrend: { currentPrice: 1750, price1W: 1680, price1M: 1620, price3M: 1520, price6M: 1380, price1Y: 1150 },
+    marketReference: { lowestPrice: 1650, averagePrice: 1720, highestPrice: 1850, volume: 38000 },
+    forecast: { nextWeek: 1800, nextMonth: 1860, confidence: 78 }
   },
   {
     route: 'MED', routeName: '地中海航线',
-    historicalTrend: { currentPrice: 2650, price1W: 2600, price1M: 2550, price3M: 2400, price6M: 2150, price1Y: 1880 },
-    marketReference: { lowestPrice: 2500, averagePrice: 2620, highestPrice: 2850, volume: 78000 },
-    forecast: { nextWeek: 2680, nextMonth: 2750, confidence: 70 }
+    historicalTrend: { currentPrice: 2491, price1W: 2590, price1M: 2800, price3M: 2600, price6M: 2300, price1Y: 1950 },
+    marketReference: { lowestPrice: 2350, averagePrice: 2480, highestPrice: 2700, volume: 72000 },
+    forecast: { nextWeek: 2430, nextMonth: 2350, confidence: 72 }
   },
   {
     route: 'SEA', routeName: '东南亚航线',
-    historicalTrend: { currentPrice: 580, price1W: 560, price1M: 550, price3M: 520, price6M: 480, price1Y: 420 },
-    marketReference: { lowestPrice: 480, averagePrice: 560, highestPrice: 620, volume: 320000 },
-    forecast: { nextWeek: 590, nextMonth: 610, confidence: 82 }
+    historicalTrend: { currentPrice: 541, price1W: 515, price1M: 480, price3M: 450, price6M: 420, price1Y: 380 },
+    marketReference: { lowestPrice: 480, averagePrice: 530, highestPrice: 600, volume: 310000 },
+    forecast: { nextWeek: 555, nextMonth: 580, confidence: 76 }
   },
   {
     route: 'MDE', routeName: '中东航线',
-    historicalTrend: { currentPrice: 1450, price1W: 1420, price1M: 1400, price3M: 1320, price6M: 1200, price1Y: 1050 },
-    marketReference: { lowestPrice: 1350, averagePrice: 1430, highestPrice: 1550, volume: 95000 },
-    forecast: { nextWeek: 1460, nextMonth: 1500, confidence: 72 }
+    historicalTrend: { currentPrice: 4031, price1W: 4167, price1M: 3800, price3M: 3000, price6M: 1800, price1Y: 1200 },
+    marketReference: { lowestPrice: 3800, averagePrice: 3980, highestPrice: 4300, volume: 88000 },
+    forecast: { nextWeek: 3950, nextMonth: 3800, confidence: 68 }
   },
   {
     route: 'SA', routeName: '南美航线',
-    historicalTrend: { currentPrice: 1850, price1W: 1920, price1M: 1880, price3M: 1750, price6M: 1580, price1Y: 1380 },
-    marketReference: { lowestPrice: 1680, averagePrice: 1820, highestPrice: 1980, volume: 55000 },
-    forecast: { nextWeek: 1820, nextMonth: 1900, confidence: 68 }
+    historicalTrend: { currentPrice: 2419, price1W: 2501, price1M: 2450, price3M: 2200, price6M: 1850, price1Y: 1550 },
+    marketReference: { lowestPrice: 2280, averagePrice: 2400, highestPrice: 2600, volume: 52000 },
+    forecast: { nextWeek: 2380, nextMonth: 2300, confidence: 66 }
   }
 ];
 
