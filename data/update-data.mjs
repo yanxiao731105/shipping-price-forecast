@@ -106,7 +106,7 @@ async function main() {
   // 注：IFO380/VLSFO 无稳定免费 API，使用合理市场参考值
   // 实际生产环境建议接入 BunkerEx / Ship & Bunker 等付费 API
   const fuelPrice = {
-    ifo380: 607,    // IFO 380 USD/MT（2026年4月20日，全球4港均值）
+    ifo380: 606.5,  // IFO 380 USD/MT（2026年4月20日，全球4港均值）
     vlsfo: 716,     // VLSFO 0.5% USD/MT（2026年4月20日，全球4港均值）
     unit: 'USD/MT',
     trend: 'down',

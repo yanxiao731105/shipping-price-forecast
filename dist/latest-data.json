@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updatedAt": "2026-04-21T00:54:16.710Z",
+    "updatedAt": "2026-04-21T01:31:40.021Z",
     "date": "2026-04-21",
     "version": "2.1",
     "dataSource": {
@@ -233,7 +233,7 @@
   },
   "macro": {
     "fuelPrice": {
-      "ifo380": 607,
+      "ifo380": 606.5,
       "vlsfo": 716,
       "unit": "USD/MT",
       "trend": "down",
